@@ -28,7 +28,20 @@
 	* {
 		@apply border-border;
 	}
+
 	body {
 		@apply bg-background text-foreground font-sans;
 	}
+
+	main {
+		@apply mx-4;
+	}
+}
+
+h1 {
+	@apply mt-8 mb-4 text-4xl font-black;
+}
+
+h2 {
+	@apply mt-4 mb-2 text-3xl font-semibold;
 }

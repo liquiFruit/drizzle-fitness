@@ -9,7 +9,7 @@ export default async function Home() {
 	if (session?.user?.email) redirect("/dashboard")
 
 	return (
-		<main className="mx-4">
+		<main>
 			<div className="relative drop-shadow-lg  drop-shadow-color-primary/30 mx-auto max-w-75% overflow-hidden brightness-80 aspect-square rounded-full">
 				<Image
 					alt=""
@@ -21,10 +21,10 @@ export default async function Home() {
 				/>
 			</div>
 
-			<div className="my-8 text-4xl font-black">
+			<h1>
 				Track your
 				<p className="text-primary">progress</p>
-			</div>
+			</h1>
 
 			<ul className="list-disc ml-4">
 				<li>
