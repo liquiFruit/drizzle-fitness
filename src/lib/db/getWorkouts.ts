@@ -7,7 +7,7 @@ export async function getWorkoutsByUserEmail(email: User["email"]) {
   return await db.query.users.findFirst({
     where: eq(users.email, email), with: {
       workouts: {
-        columns: { id: true }
+        columns: { id: true, date: true }
       }
     }
   })
