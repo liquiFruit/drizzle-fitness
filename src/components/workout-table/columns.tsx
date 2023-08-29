@@ -15,7 +15,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { ColumnHeader } from "../ui/column-header"
+import { ColumnHeader } from "@/components/ui/data-table/column-header"
 
 export const columns: ColumnDef<Workout>[] = [
 	{
