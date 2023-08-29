@@ -15,15 +15,22 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { ColumnHeader } from "../ui/column-header"
 
 export const columns: ColumnDef<Workout>[] = [
 	{
 		accessorKey: "id",
-		header: "ID",
+		header: ({ column }) => <ColumnHeader column={column} title="ID" />,
 	},
 	{
 		accessorKey: "date",
-		header: () => <div className="text-right">Date</div>,
+		header: ({ column }) => (
+			<ColumnHeader
+				className="justify-end"
+				column={column}
+				title="Date"
+			/>
+		),
 		cell: ({ row }) => {
 			const date = fuzyTime(row.getValue("date"))
 			return <div className="text-right font-medium">{date}</div>
