@@ -65,6 +65,7 @@ export const workouts = sqliteTable("workouts", {
   userId: text("user_id").notNull(),
   date: integer("date").notNull()
 })
+export type Workout = Omit<typeof workouts.$inferSelect, "userId">
 
 export const usersRelations = relations(users, ({ many }) => ({
   workouts: many(workouts),
