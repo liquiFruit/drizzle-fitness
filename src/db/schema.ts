@@ -6,6 +6,7 @@ import {
 } from "drizzle-orm/sqlite-core"
 import type { AdapterAccount } from "@auth/core/adapters"
 
+
 export const users = sqliteTable("user", {
   id: text("id").notNull().primaryKey(),
   name: text("name"),
@@ -13,6 +14,7 @@ export const users = sqliteTable("user", {
   emailVerified: integer("emailVerified", { mode: "timestamp_ms" }),
   image: text("image"),
 })
+export type User = typeof users.$inferSelect
 
 export const accounts = sqliteTable(
   "account",

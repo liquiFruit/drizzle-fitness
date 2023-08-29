@@ -10,6 +10,9 @@ dependencies:
   '@radix-ui/react-slot':
     specifier: ^1.0.2
     version: 1.0.2(@types/react@18.2.20)(react@18.2.0)
+  '@types/better-sqlite3':
+    specifier: ^7.6.4
+    version: 7.6.4
   '@types/node':
     specifier: 20.5.2
     version: 20.5.2
@@ -42,7 +45,7 @@ dependencies:
     version: 0.19.13
   drizzle-orm:
     specifier: ^0.28.5
-    version: 0.28.5(better-sqlite3@8.5.2)
+    version: 0.28.5(@types/better-sqlite3@7.6.4)(better-sqlite3@8.5.2)
   eslint:
     specifier: 8.47.0
     version: 8.47.0
@@ -922,6 +925,12 @@ packages:
       minimatch: 7.4.6
       mkdirp: 2.1.6
       path-browserify: 1.0.1
+    dev: false
+
+  /@types/better-sqlite3@7.6.4:
+    resolution: {integrity: sha512-dzrRZCYPXIXfSR1/surNbJ/grU3scTaygS0OMzjlGf71i9sc2fGyHPXXiXmEvNIoE0cGwsanEFMVJxPXmco9Eg==}
+    dependencies:
+      '@types/node': 20.5.2
     dev: false
 
   /@types/estree@1.0.1:
@@ -1861,7 +1870,7 @@ packages:
       - supports-color
     dev: false
 
-  /drizzle-orm@0.28.5(better-sqlite3@8.5.2):
+  /drizzle-orm@0.28.5(@types/better-sqlite3@7.6.4)(better-sqlite3@8.5.2):
     resolution: {integrity: sha512-6r6Iw4c38NAmW6TiKH3TUpGUQ1YdlEoLJOQptn8XPx3Z63+vFNKfAiANqrIiYZiMjKR9+NYAL219nFrmo1duXA==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
@@ -1923,6 +1932,7 @@ packages:
       sqlite3:
         optional: true
     dependencies:
+      '@types/better-sqlite3': 7.6.4
       better-sqlite3: 8.5.2
     dev: false
 
