@@ -20,7 +20,8 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table"
-import { DataTablePagination } from "./data-table-pagination"
+import { DataTablePagination } from "@/components/ui/data-table-pagination"
+import { DataTableViewOptions } from "@/components/ui/data-table-view-options"
 
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[]
@@ -47,7 +48,9 @@ export function DataTable<TData, TValue>({
 
 	return (
 		<>
-			<div className="rounded-md border border-border mb-2">
+			<DataTableViewOptions table={table} />
+
+			<div className="rounded-md border border-border my-2">
 				<Table>
 					<TableHeader>
 						{table.getHeaderGroups().map((headerGroup) => (
