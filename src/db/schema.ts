@@ -11,7 +11,7 @@ import { relations } from "drizzle-orm"
 export const users = sqliteTable("user", {
   id: text("id").notNull().primaryKey(),
   name: text("name"),
-  email: text("email").notNull(),
+  email: text("email").notNull().unique(),
   emailVerified: integer("emailVerified", { mode: "timestamp_ms" }),
   image: text("image")
 })
@@ -60,7 +60,7 @@ export const verificationTokens = sqliteTable(
 )
 
 export const workouts = sqliteTable("workouts", {
-  id: text("id").notNull().primaryKey(),
+  id: text("workout_id").notNull().primaryKey(),
   userId: text("user_id").notNull()
 })
 
