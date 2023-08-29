@@ -3,6 +3,7 @@ import {
   sqliteTable,
   text,
   primaryKey,
+  real
 } from "drizzle-orm/sqlite-core"
 import type { AdapterAccount } from "@auth/core/adapters"
 import { relations } from "drizzle-orm"
@@ -68,9 +69,33 @@ export const usersRelations = relations(users, ({ many }) => ({
   workouts: many(workouts),
 }))
 
-export const workoutsRelations = relations(workouts, ({ one }) => ({
+export const workoutsRelations = relations(workouts, ({ one, many }) => ({
   user: one(users, {
     fields: [workouts.userId],
     references: [users.id],
   }),
+
+  workoutExercises: many(workoutExercises)
 }))
+
+export const exercises = sqliteTable("exercises", {
+  id: text("exercise_id").notNull().primaryKey(),
+  name: text("name")
+  // calories per minute
+})
+
+export const workoutExercises = sqliteTable("workout_exercises", {
+  id: text("workout_exercise_id").primaryKey(),
+  workoutId: text("foregin_workout_id").notNull(),
+  exerciseId: text("foregin_exercise_id"),
+  reps: real("reps")
+})
+
+export const workoutExercisesRelations = relations(workoutExercises,
+  ({ one, many }) => ({
+    workouts: one(workouts, {
+      fields: [workoutExercises.workoutId],
+      references: [workouts.id],
+    }),
+  })
+)
