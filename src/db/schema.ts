@@ -5,6 +5,7 @@ import {
   primaryKey,
 } from "drizzle-orm/sqlite-core"
 import type { AdapterAccount } from "@auth/core/adapters"
+import { relations } from "drizzle-orm"
 
 
 export const users = sqliteTable("user", {
@@ -12,7 +13,7 @@ export const users = sqliteTable("user", {
   name: text("name"),
   email: text("email").notNull(),
   emailVerified: integer("emailVerified", { mode: "timestamp_ms" }),
-  image: text("image"),
+  image: text("image")
 })
 export type User = typeof users.$inferSelect
 
@@ -57,3 +58,19 @@ export const verificationTokens = sqliteTable(
     compoundKey: primaryKey(vt.identifier, vt.token),
   })
 )
+
+export const workouts = sqliteTable("workouts", {
+  id: text("id").notNull().primaryKey(),
+  userId: text("user_id").notNull()
+})
+
+export const usersRelations = relations(users, ({ many }) => ({
+  workouts: many(workouts),
+}))
+
+export const workoutsRelations = relations(workouts, ({ one }) => ({
+  user: one(users, {
+    fields: [workouts.userId],
+    references: [users.id],
+  }),
+}))
