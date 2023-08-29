@@ -1,12 +1,16 @@
-import { Button } from "@/components/ui/button"
 import Image from "next/image"
+import { redirect } from "next/navigation"
 
+import { useServerAuth } from "@/lib/auth/use-server-auth"
 import img from "@/../public/hero_img.png"
 
-export default function Home() {
+export default async function Home() {
+	const session = await useServerAuth()
+	if (session?.user?.email) redirect("/dashboard")
+
 	return (
 		<main className="mx-4">
-			<div className="relative aspect-square overflow-hidden rounded-full">
+			<div className="relative drop-shadow-lg  drop-shadow-color-primary/30 mx-auto max-w-75% overflow-hidden brightness-80 aspect-square rounded-full">
 				<Image
 					alt=""
 					src={img}
@@ -39,7 +43,6 @@ export default function Home() {
 
 				<li>Enjoy live updates and real-time progress tracking.</li>
 			</ul>
-			<Button className="w-full mt-4">Get started</Button>
 		</main>
 	)
 }
