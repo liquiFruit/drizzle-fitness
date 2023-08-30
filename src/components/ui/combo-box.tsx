@@ -20,32 +20,20 @@ import {
 
 const frameworks = [
 	{
-		value: "next.js",
-		label: "Next.js",
+		value: "pushups",
+		label: "Pushups",
 	},
 	{
-		value: "sveltekit",
-		label: "SvelteKit",
-	},
-	{
-		value: "nuxt.js",
-		label: "Nuxt.js",
-	},
-	{
-		value: "remix",
-		label: "Remix",
-	},
-	{
-		value: "astro",
-		label: "Astro",
+		value: "squats",
+		label: "Squats",
 	},
 ]
 
-export function Combobox({
-	onValueChanged,
-}: {
+type ComboboxProps = {
+	className?: string
 	onValueChanged?: (value: string) => void
-}) {
+}
+export function Combobox({ onValueChanged, className }: ComboboxProps) {
 	const [open, setOpen] = React.useState(false)
 	const [value, setValue] = React.useState<string>()
 
@@ -61,20 +49,21 @@ export function Combobox({
 					variant="outline"
 					role="combobox"
 					aria-expanded={open}
-					className="w-[200px] justify-between"
+					className="w-full justify-between"
 				>
 					{value
 						? frameworks.find(
 								(framework) => framework.value === value
 						  )?.label
-						: "Select framework..."}
+						: "Select an exercise..."}
 					<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent className="w-[200px] p-0">
+
+			<PopoverContent className="p-0">
 				<Command>
 					<CommandInput placeholder="Search framework..." />
-					<CommandEmpty>No framework found.</CommandEmpty>
+					<CommandEmpty>No exercises found.</CommandEmpty>
 					<CommandGroup>
 						{frameworks.map((framework) => (
 							<CommandItem

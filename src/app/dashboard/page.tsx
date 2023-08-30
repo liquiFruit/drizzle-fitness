@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation"
 import { useServerAuth } from "@/lib/auth/use-server-auth"
 import { DatePicker } from "@/components/ui/date-picker"
+import { ExerciseCrud } from "@/components/workout-crud/exercise-crud"
+import { ExerciseSetCrud } from "@/components/workout-crud/set-crud"
 
 export default async function Dashboard() {
 	const session = await useServerAuth()
@@ -14,7 +16,7 @@ export default async function Dashboard() {
 					<DatePicker />
 				</div>
 
-				<div className="border border-border">Add Exercise</div>
+				<ExerciseCrud />
 			</section>
 		</main>
 	)

@@ -15,25 +15,16 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Combobox } from "@/components/ui/combo-box"
+
 import type { ExerciseSet } from "@/db"
-import { ExerciseSetCrud } from "../set-crud"
+import { PlusIcon } from "lucide-react"
 
 const formSchema = z.object({
-	exerciseId: z.string().min(2, {
-		message: "Exercise is required.",
-	}),
+	order: z.number().int({ message: "Order must be an interger" }).optional(),
+	details: z.number({ required_error: "Set details are required" }),
+}) as z.ZodType<ExerciseSet>
 
-	set: z.object({
-		order: z
-			.number()
-			.int({ message: "Order must be an interger" })
-			.optional(),
-		details: z.number({ required_error: "Set details are required" }),
-	}) as z.ZodType<ExerciseSet>,
-})
-
-export function ExerciseCrud() {
+export function ExerciseSetCrud() {
 	const form = useForm<z.infer<typeof formSchema>>({
 		// @ts-ignore
 		resolver: zodResolver(formSchema),
@@ -45,23 +36,30 @@ export function ExerciseCrud() {
 
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+			<form
+				onSubmit={form.handleSubmit(onSubmit)}
+				className="flex flex-row gap-2 items-end"
+			>
 				<FormField
 					control={form.control}
-					name="exerciseId"
+					name="order"
 					render={({ field, fieldState: { error } }) => (
 						<FormItem>
-							<FormLabel>Choose an Exercise</FormLabel>
+							<FormLabel>Order</FormLabel>
 							{!error ? (
-								<FormDescription>
-									The type of exercise
-								</FormDescription>
+								<FormDescription>Optional</FormDescription>
 							) : (
 								<FormMessage />
 							)}
+
 							<FormControl>
-								<Combobox
-									onValueChanged={() => alert("submit?")}
+								<Input
+									type="number"
+									className="w-20 text-center"
+									{...field}
+									onChange={({ target: { value } }) =>
+										field.onChange(parseInt(value))
+									}
 								/>
 							</FormControl>
 						</FormItem>
@@ -70,23 +68,39 @@ export function ExerciseCrud() {
 
 				<FormField
 					control={form.control}
-					name="exerciseId"
+					name="details"
 					render={({ field, fieldState: { error } }) => (
-						<FormItem>
-							<FormLabel>Choose an Exercise</FormLabel>
+						<FormItem className="w-full">
+							<FormLabel>Details</FormLabel>
 							{!error ? (
 								<FormDescription>
-									The type of exercise
+									Reps/distance/time.
 								</FormDescription>
 							) : (
 								<FormMessage />
 							)}
+
 							<FormControl>
-								<ExerciseSetCrud />
+								<Input
+									type="number"
+									className="text-center"
+									onBlur={({ target: { value } }) =>
+										field.onChange(parseFloat(value))
+									}
+								/>
 							</FormControl>
 						</FormItem>
 					)}
 				/>
+
+				<Button
+					size={"icon"}
+					variant={"secondary"}
+					type="submit"
+					className="aspect-square"
+				>
+					<PlusIcon />
+				</Button>
 			</form>
 		</Form>
 	)
