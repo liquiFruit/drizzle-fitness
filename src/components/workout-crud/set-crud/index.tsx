@@ -17,90 +17,118 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 
 import type { ExerciseSet } from "@/db"
-import { PlusIcon } from "lucide-react"
+import { CheckIcon, PlusIcon } from "lucide-react"
+import { Combobox } from "@/components/ui/combo-box"
+import { useRef, useState } from "react"
+import { cn } from "@/lib/utils"
 
 const formSchema = z.object({
-	order: z.number().int({ message: "Order must be an interger" }).optional(),
-	details: z.number({ required_error: "Set details are required" }),
+	exerciseId: z.string().min(1, "Exercise type is required."),
+
+	order: z.union([z.number().int().positive(), z.nan()]).optional(),
+
+	details: z.number({ invalid_type_error: "Required" }).positive(),
 }) as z.ZodType<ExerciseSet>
 
-export function ExerciseSetCrud() {
-	const form = useForm<z.infer<typeof formSchema>>({
+type ExerciseSetCrudProps = {
+	onCreate: (set: ExerciseSet) => void
+	initialState: Partial<ExerciseSet>
+}
+export function ExerciseSetCrud({
+	onCreate,
+	initialState,
+}: ExerciseSetCrudProps) {
+	const form = useForm<ExerciseSet>({
 		// @ts-ignore
 		resolver: zodResolver(formSchema),
 	})
+	const [adding, setAdding] = useState(false)
 
-	function onSubmit(values: z.infer<typeof formSchema>) {
-		alert("submitted")
+	function onSubmit(values: ExerciseSet) {
+		onCreate(values)
+		form.setValue("details", 0)
+
+		setAdding(true)
+		setTimeout(() => setAdding(false), 1000)
+	}
+
+	function resetForm() {
+		form.reset(initialState)
 	}
 
 	return (
 		<Form {...form}>
 			<form
 				onSubmit={form.handleSubmit(onSubmit)}
-				className="flex flex-row gap-2 items-end"
+				className="flex flex-col gap-2 items-end border border-border rounded-md p-2"
 			>
+				{/* Exercise picker */}
 				<FormField
 					control={form.control}
-					name="order"
-					render={({ field, fieldState: { error } }) => (
-						<FormItem>
-							<FormLabel>Order</FormLabel>
-							{!error ? (
-								<FormDescription>Optional</FormDescription>
-							) : (
-								<FormMessage />
-							)}
-
-							<FormControl>
-								<Input
-									type="number"
-									className="w-20 text-center"
-									{...field}
-									onChange={({ target: { value } }) =>
-										field.onChange(parseInt(value))
-									}
-								/>
-							</FormControl>
-						</FormItem>
-					)}
-				/>
-
-				<FormField
-					control={form.control}
-					name="details"
+					name="exerciseId"
 					render={({ field, fieldState: { error } }) => (
 						<FormItem className="w-full">
-							<FormLabel>Details</FormLabel>
-							{!error ? (
-								<FormDescription>
-									Reps/distance/time.
-								</FormDescription>
-							) : (
+							<div className="children:inline">
+								<FormLabel>Exercise Type </FormLabel>
 								<FormMessage />
-							)}
-
+							</div>
 							<FormControl>
-								<Input
-									type="number"
-									className="text-center"
-									onBlur={({ target: { value } }) =>
-										field.onChange(parseFloat(value))
-									}
+								<Combobox
+									value={field.value}
+									setValue={field.onChange}
 								/>
 							</FormControl>
 						</FormItem>
 					)}
 				/>
 
-				<Button
-					size={"icon"}
-					variant={"secondary"}
-					type="submit"
-					className="aspect-square"
-				>
-					<PlusIcon />
-				</Button>
+				<div className="flex flex-row gap-2 items-end w-full">
+					{/* Details section */}
+					<FormField
+						control={form.control}
+						name="details"
+						render={({ field, fieldState: { error } }) => (
+							<FormItem className="w-full">
+								{/* Header section */}
+								<div className="children:inline">
+									<FormLabel className="mr-2">
+										Details
+									</FormLabel>
+
+									{!error ? (
+										<FormDescription>
+											Reps/distance/time
+										</FormDescription>
+									) : (
+										<FormMessage />
+									)}
+								</div>
+
+								<FormControl>
+									<Input
+										type="number"
+										className="text-center"
+										{...field}
+										onChange={(e) => {
+											field.onChange(
+												e.target.valueAsNumber
+											)
+										}}
+									/>
+								</FormControl>
+							</FormItem>
+						)}
+					/>
+
+					<Button
+						size={"icon"}
+						variant={"secondary"}
+						type="submit"
+						className={cn("aspect-square", adding && "bg-emerald!")}
+					>
+						{!adding ? <PlusIcon /> : <CheckIcon />}
+					</Button>
+				</div>
 			</form>
 		</Form>
 	)

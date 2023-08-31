@@ -9,9 +9,7 @@ export default async function Dashboard() {
 
 	return (
 		<main>
-			<section>
-				<WorkoutCrud />
-			</section>
+			<WorkoutCrud />
 		</main>
 	)
 }

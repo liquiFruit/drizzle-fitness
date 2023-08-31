@@ -45,3 +45,7 @@ h1 {
 h2 {
 	@apply mt-4 mb-2 text-3xl font-semibold;
 }
+
+h3 {
+	@apply mt-2 mb-1 text-xl;
+}

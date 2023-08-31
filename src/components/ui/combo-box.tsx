@@ -31,16 +31,11 @@ const frameworks = [
 
 type ComboboxProps = {
 	className?: string
-	onValueChanged?: (value: string) => void
+	value: string | null
+	setValue: (value: string) => void
 }
-export function Combobox({ onValueChanged, className }: ComboboxProps) {
+export function Combobox({ value, setValue, className }: ComboboxProps) {
 	const [open, setOpen] = React.useState(false)
-	const [value, setValue] = React.useState<string>()
-
-	const updateValue = (value: string) => {
-		if (onValueChanged) onValueChanged(value)
-		setValue(value)
-	}
 
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
@@ -69,7 +64,7 @@ export function Combobox({ onValueChanged, className }: ComboboxProps) {
 							<CommandItem
 								key={framework.value}
 								onSelect={(currentValue) => {
-									updateValue(
+									setValue(
 										currentValue === value
 											? ""
 											: currentValue
