@@ -41,6 +41,7 @@ export function ExerciseSetCrud({
 	const form = useForm<ExerciseSet>({
 		// @ts-ignore
 		resolver: zodResolver(formSchema),
+		defaultValues: initialState,
 	})
 	const [adding, setAdding] = useState(false)
 
