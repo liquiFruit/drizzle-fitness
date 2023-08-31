@@ -108,5 +108,5 @@ export const workoutExerciseSets = sqliteTable("workout_exercises", {
   order: integer("order_in_exercise").notNull(),
   details: real("details").notNull()
 })
-export type ExerciseSet = Omit<typeof workoutExerciseSets.$inferSelect, "id" | "exerciseId">
+export type ExerciseSet = Omit<typeof workoutExerciseSets.$inferSelect, "id">
 
