@@ -20,39 +20,22 @@ import {
 
 const frameworks = [
 	{
-		value: "next.js",
-		label: "Next.js",
+		value: "pushups",
+		label: "Pushups",
 	},
 	{
-		value: "sveltekit",
-		label: "SvelteKit",
-	},
-	{
-		value: "nuxt.js",
-		label: "Nuxt.js",
-	},
-	{
-		value: "remix",
-		label: "Remix",
-	},
-	{
-		value: "astro",
-		label: "Astro",
+		value: "squats",
+		label: "Squats",
 	},
 ]
 
-export function Combobox({
-	onValueChanged,
-}: {
-	onValueChanged?: (value: string) => void
-}) {
+type ComboboxProps = {
+	className?: string
+	value: string | null
+	setValue: (value: string) => void
+}
+export function Combobox({ value, setValue, className }: ComboboxProps) {
 	const [open, setOpen] = React.useState(false)
-	const [value, setValue] = React.useState<string>()
-
-	const updateValue = (value: string) => {
-		if (onValueChanged) onValueChanged(value)
-		setValue(value)
-	}
 
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
@@ -61,26 +44,27 @@ export function Combobox({
 					variant="outline"
 					role="combobox"
 					aria-expanded={open}
-					className="w-[200px] justify-between"
+					className="w-full justify-between"
 				>
 					{value
 						? frameworks.find(
 								(framework) => framework.value === value
 						  )?.label
-						: "Select framework..."}
+						: "Select an exercise..."}
 					<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent className="w-[200px] p-0">
+
+			<PopoverContent className="p-0">
 				<Command>
 					<CommandInput placeholder="Search framework..." />
-					<CommandEmpty>No framework found.</CommandEmpty>
+					<CommandEmpty>No exercises found.</CommandEmpty>
 					<CommandGroup>
 						{frameworks.map((framework) => (
 							<CommandItem
 								key={framework.value}
 								onSelect={(currentValue) => {
-									updateValue(
+									setValue(
 										currentValue === value
 											? ""
 											: currentValue

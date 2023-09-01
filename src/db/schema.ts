@@ -90,7 +90,7 @@ export const workoutExercises = sqliteTable("workout_exercises", {
   id: text("workout_exercise_id").primaryKey(),
   workoutId: text("foregin_workout_id").notNull(),
   exerciseId: text("foregin_exercise_id"),
-  reps: real("reps")
+  reps: real("reps") // remove
 })
 
 export const workoutExercisesRelations = relations(workoutExercises,
@@ -101,3 +101,12 @@ export const workoutExercisesRelations = relations(workoutExercises,
     }),
   })
 )
+
+export const workoutExerciseSets = sqliteTable("workout_exercises", {
+  id: text("set_id").primaryKey(),
+  exerciseId: text("foregin_exercise_id"),
+  order: integer("order_in_exercise").notNull(),
+  details: real("details").notNull()
+})
+export type ExerciseSet = Omit<typeof workoutExerciseSets.$inferSelect, "id">
+
