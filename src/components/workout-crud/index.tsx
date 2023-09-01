@@ -5,6 +5,8 @@ import { memo, useState } from "react"
 import { DatePicker } from "@/components/ui/date-picker"
 import { ExerciseSetCrud } from "./set-crud"
 import { ExerciseSet, Workout } from "@/db"
+import { DataTable } from "../ui/data-table"
+import { columns } from "./columns"
 
 interface FullWorkout {
 	date: Date
@@ -48,20 +50,8 @@ export function WorkoutCrud({ initialState }: WorkoutCrudProps) {
 
 			<h3>Sets</h3>
 			<div>
-				{workout.sets.map((set, i) => (
-					<Set key={i} set={set} />
-				))}
+				<DataTable columns={columns} data={workout.sets} />
 			</div>
 		</section>
 	)
 }
-
-const Set = memo(({ set }: { set: ExerciseSet }) => {
-	console.log("rendering " + set.details)
-
-	return (
-		<p>
-			{set.exerciseId} - {set.details}
-		</p>
-	)
-})
