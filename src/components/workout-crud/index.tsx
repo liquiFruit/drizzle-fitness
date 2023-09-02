@@ -7,6 +7,8 @@ import { ExerciseSetCrud } from "./set-crud"
 import { ExerciseSet, Workout } from "@/db"
 import { DataTable } from "../ui/data-table"
 import { columns } from "./columns"
+import { Button } from "../ui/button"
+import { CheckSquareIcon } from "lucide-react"
 
 interface FullWorkout {
 	date: Date
@@ -31,6 +33,15 @@ export function WorkoutCrud({ initialState }: WorkoutCrudProps) {
 		if (date) setWorkout({ ...workout, date })
 	}
 
+	const postWorkout = async () => {
+		const res = await fetch("/api/workouts/create", {
+			body: JSON.stringify(workout),
+			method: "POST",
+		})
+
+		console.log(res)
+	}
+
 	return (
 		<section>
 			{/* Header */}
@@ -51,6 +62,15 @@ export function WorkoutCrud({ initialState }: WorkoutCrudProps) {
 			<h3>Sets</h3>
 			<div>
 				<DataTable columns={columns} data={workout.sets} />
+
+				<Button
+					className="w-full my-8"
+					disabled={workout.sets.length === 0}
+					onClick={postWorkout}
+				>
+					<CheckSquareIcon className="mr-2" />
+					Create Workout
+				</Button>
 			</div>
 		</section>
 	)

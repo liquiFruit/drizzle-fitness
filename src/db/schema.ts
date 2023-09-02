@@ -61,7 +61,7 @@ export const verificationTokens = sqliteTable(
 )
 
 export const workouts = sqliteTable("workouts", {
-  id: text("workout_id").notNull().primaryKey(),
+  id: text("workout_id").primaryKey(),
   userId: text("user_id").notNull(),
   date: integer("date").notNull()
 })
