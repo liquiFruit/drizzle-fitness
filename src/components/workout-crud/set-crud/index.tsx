@@ -16,45 +16,41 @@ import {
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 
-import type { ExerciseSet } from "@/db"
+import type { InsertWorkoutSet, WorkoutSet } from "@/db"
 import { CheckIcon, PlusIcon } from "lucide-react"
 import { Combobox } from "@/components/ui/combo-box"
 import { useRef, useState } from "react"
 import { cn } from "@/lib/utils"
+import { CRUDWorkoutSet } from "@/lib/validators/workout"
 
 const formSchema = z.object({
-	exerciseId: z.string().min(1, "Exercise type is required."),
-
+	workoutExerciseId: z.string().min(1, "Exercise type is required."),
 	order: z.union([z.number().int().positive(), z.nan()]).optional(),
-
 	details: z.number({ invalid_type_error: "Required" }).positive(),
-}) as z.ZodType<ExerciseSet>
+}) as z.ZodType<CRUDWorkoutSet>
 
-type ExerciseSetCrudProps = {
-	onCreate: (set: ExerciseSet) => void
-	initialState: Partial<ExerciseSet>
+type WorkoutSetCrudProps = {
+	onCreate: (set: CRUDWorkoutSet) => void
+	initialState: Partial<CRUDWorkoutSet>
 }
-export function ExerciseSetCrud({
+export function WorkoutSetCrud({
 	onCreate,
 	initialState,
-}: ExerciseSetCrudProps) {
-	const form = useForm<ExerciseSet>({
+}: WorkoutSetCrudProps) {
+	const form = useForm<CRUDWorkoutSet>({
 		// @ts-ignore
 		resolver: zodResolver(formSchema),
 		defaultValues: initialState,
 	})
 	const [adding, setAdding] = useState(false)
 
-	function onSubmit(values: ExerciseSet) {
+	function onSubmit(values: CRUDWorkoutSet) {
+		values = { ...values, order: Date.now() }
 		onCreate(values)
 		form.setValue("details", 0)
 
 		setAdding(true)
 		setTimeout(() => setAdding(false), 1000)
-	}
-
-	function resetForm() {
-		form.reset(initialState)
 	}
 
 	return (
@@ -66,7 +62,7 @@ export function ExerciseSetCrud({
 				{/* Exercise picker */}
 				<FormField
 					control={form.control}
-					name="exerciseId"
+					name="workoutExerciseId"
 					render={({ field, fieldState: { error } }) => (
 						<FormItem className="w-full">
 							<div className="children:inline">

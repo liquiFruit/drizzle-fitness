@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { MoreHorizontal } from "lucide-react"
 
-import { ExerciseSet } from "@/db"
+import { WorkoutSet } from "@/db"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -14,20 +14,23 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { ColumnHeader } from "@/components/ui/data-table/column-header"
+import { CRUDWorkoutSet } from "@/lib/validators/workout"
 
-export const columns: ColumnDef<ExerciseSet>[] = [
+export const columns: ColumnDef<CRUDWorkoutSet>[] = [
 	{
 		accessorKey: "order",
 		header: ({ column }) => <ColumnHeader column={column} title="#" />,
 	},
 	{
-		accessorKey: "exerciseId",
+		accessorKey: "workoutExerciseId",
 		header: ({ column }) => (
 			<ColumnHeader column={column} title="Exercise" />
 		),
 		cell: ({ row }) => {
 			return (
-				<div className="font-medium">{row.getValue("exerciseId")}</div>
+				<div className="font-medium">
+					{row.getValue("workoutExerciseId")}
+				</div>
 			)
 		},
 	},

@@ -9,6 +9,7 @@ import type { AdapterAccount } from "@auth/core/adapters"
 import { relations } from "drizzle-orm"
 
 
+/* Accounts tables */
 export const users = sqliteTable("user", {
   id: text("id").notNull().primaryKey(),
   name: text("name"),
@@ -17,6 +18,9 @@ export const users = sqliteTable("user", {
   image: text("image")
 })
 export type User = typeof users.$inferSelect
+export const usersRelations = relations(users, ({ many }) => ({
+  workouts: many(workouts),
+}))
 
 export const accounts = sqliteTable(
   "account",
@@ -60,17 +64,21 @@ export const verificationTokens = sqliteTable(
   })
 )
 
+/* Exercise info  */
+export const exercises = sqliteTable("exercises", {
+  id: text("exercise_id").notNull().primaryKey(),
+  name: text("name")
+  // calories per minute
+  // muscle group
+})
+
+
+/* Workouts */
 export const workouts = sqliteTable("workouts", {
-  id: text("workout_id").primaryKey(),
+  id: integer("workout_id").primaryKey(),
   userId: text("user_id").notNull(),
   date: integer("date").notNull()
 })
-export type Workout = Omit<typeof workouts.$inferSelect, "userId">
-
-export const usersRelations = relations(users, ({ many }) => ({
-  workouts: many(workouts),
-}))
-
 export const workoutsRelations = relations(workouts, ({ one, many }) => ({
   user: one(users, {
     fields: [workouts.userId],
@@ -80,33 +88,35 @@ export const workoutsRelations = relations(workouts, ({ one, many }) => ({
   workoutExercises: many(workoutExercises)
 }))
 
-export const exercises = sqliteTable("exercises", {
-  id: text("exercise_id").notNull().primaryKey(),
-  name: text("name")
-  // calories per minute
-})
 
+/* Workout exercises */
 export const workoutExercises = sqliteTable("workout_exercises", {
-  id: text("workout_exercise_id").primaryKey(),
-  workoutId: text("foregin_workout_id").notNull(),
-  exerciseId: text("foregin_exercise_id"),
-  reps: real("reps") // remove
+  id: integer("workout_exercise_id").primaryKey(),
+  workoutId: integer("foreign_workout_id").notNull(),
+  exerciseId: text("foreign_exercise_id").notNull(),
 })
-
 export const workoutExercisesRelations = relations(workoutExercises,
   ({ one, many }) => ({
-    workouts: one(workouts, {
+    workout: one(workouts, {
       fields: [workoutExercises.workoutId],
       references: [workouts.id],
     }),
+
+    workoutSets: many(workoutSets)
   })
 )
 
-export const workoutExerciseSets = sqliteTable("workout_exercises", {
-  id: text("set_id").primaryKey(),
-  exerciseId: text("foregin_exercise_id"),
-  order: integer("order_in_exercise").notNull(),
-  details: real("details").notNull()
+export const workoutSets = sqliteTable("workout_sets", {
+  id: integer("set_id").primaryKey(),
+  workoutExerciseId: integer("workout_exercise_id").notNull(),
+  order: integer("order_in_workout").notNull(),
+  details: real("set_details").notNull()
 })
-export type ExerciseSet = Omit<typeof workoutExerciseSets.$inferSelect, "id">
-
+export const workoutSetRelations = relations(workoutSets, ({ one }) => ({
+  workoutExercise: one(workoutExercises, {
+    fields: [workoutSets.workoutExerciseId],
+    references: [workoutExercises.id]
+  })
+}))
+export type WorkoutSet = typeof workoutSets.$inferSelect
+export type InsertWorkoutSet = typeof workoutSets.$inferInsert

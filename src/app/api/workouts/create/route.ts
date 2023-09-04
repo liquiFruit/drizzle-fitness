@@ -13,7 +13,6 @@ const handler = async (req: Request) => {
 
   // Check data
   const workout = await req.json()
-  workout.date = new Date(workout.date) // work around
 
   const isWorkout = (await FullWorkoutValidator.safeParseAsync(workout)).success
   if (!isWorkout)
