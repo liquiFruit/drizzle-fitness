@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server"
 
-import { useServerAuth } from "@/lib/auth/use-server-auth"
+import { getUserAuth } from "@/lib/auth/utils"
 import { createWorkout } from "@/lib/repositories/createWorkout"
 import { VCreateWorkout } from "@/lib/repositories/validators"
 
 const handler = async (req: Request) => {
   // Check user
-  const session = await useServerAuth()
+  const { session } = await getUserAuth()
   if (!session?.user?.email) return NextResponse.json(null, { status: 401, statusText: "Unauthorized" })
 
   // Check body

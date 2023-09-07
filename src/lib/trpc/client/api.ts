@@ -5,7 +5,7 @@ import { loggerLink } from "@trpc/client"
 import SuperJSON from "superjson"
 
 import { appRouter } from "../server/routers/_app"
-import { getUserAuth } from "../../auth"
+import { getUserAuth } from "@/lib/auth/utils"
 
 export const api = createTRPCNextAppDirServer<typeof appRouter>({
   config() {
