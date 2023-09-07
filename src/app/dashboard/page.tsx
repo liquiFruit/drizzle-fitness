@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation"
-import { useServerAuth } from "@/lib/auth/use-server-auth"
+import { getUserAuth } from "@/lib/auth/utils"
 import { WorkoutTable } from "@/components/workout-table"
 
 export default async function Dashboard() {
-	const session = await useServerAuth()
+	const { session } = await getUserAuth()
 	if (!session?.user) redirect("/")
 	return (
 		<main>

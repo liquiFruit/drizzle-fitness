@@ -7,6 +7,5 @@ import { SelectWorkout, workouts } from "@/lib/db/schema/workouts"
 export async function getWorkoutsByUserId(
   userId: typeof SelectUser._type["id"]
 ): Promise<typeof SelectWorkout._type[]> {
-
   return await db.select().from(workouts).where(eq(workouts.userId, userId))
 }

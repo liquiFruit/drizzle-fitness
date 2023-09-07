@@ -1,11 +1,11 @@
 import Image from "next/image"
 import { redirect } from "next/navigation"
 
-import { useServerAuth } from "@/lib/auth/use-server-auth"
+import { getUserAuth } from "@/lib/auth/utils"
 import img from "@/../public/hero_img.png"
 
 export default async function Home() {
-	const session = await useServerAuth()
+	const { session } = await getUserAuth()
 	if (session?.user?.email) redirect("/dashboard")
 
 	return (

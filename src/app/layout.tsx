@@ -4,6 +4,7 @@ import { MainNav } from "@/components/main-nav"
 import { AuthProvider } from "@/components/auth-provider"
 
 import "./globals.css"
+import TrpcProvider from "@/lib/trpc/client/Provider"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -25,10 +26,12 @@ export default function RootLayout({
 				></meta>
 			</head>
 			<body className={inter.className}>
-				<AuthProvider>
-					<MainNav />
-					{children}
-				</AuthProvider>
+				<TrpcProvider>
+					<AuthProvider>
+						<MainNav />
+						{children}
+					</AuthProvider>
+				</TrpcProvider>
 			</body>
 		</html>
 	)
