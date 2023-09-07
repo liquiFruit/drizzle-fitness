@@ -3,8 +3,6 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { MoreHorizontal } from "lucide-react"
 
-import { WorkoutSet } from "@/db"
-
 import { Button } from "@/components/ui/button"
 import {
 	DropdownMenu,
@@ -14,9 +12,9 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { ColumnHeader } from "@/components/ui/data-table/column-header"
-import { CRUDWorkoutSet } from "@/lib/validators/workout"
+import { InsertWorkoutSet } from "@/lib/db/schema/workouts"
 
-export const columns: ColumnDef<CRUDWorkoutSet>[] = [
+export const columns: ColumnDef<typeof InsertWorkoutSet._type>[] = [
 	{
 		accessorKey: "order",
 		header: ({ column }) => <ColumnHeader column={column} title="#" />,
@@ -40,7 +38,7 @@ export const columns: ColumnDef<CRUDWorkoutSet>[] = [
 			<ColumnHeader
 				className="justify-end"
 				column={column}
-				title="Exercise"
+				title="Details"
 			/>
 		),
 		cell: ({ row }) => {

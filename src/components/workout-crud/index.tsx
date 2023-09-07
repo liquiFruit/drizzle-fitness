@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { CheckSquareIcon, Loader2, Loader2Icon } from "lucide-react"
+import { CheckSquareIcon, Loader2Icon } from "lucide-react"
 
 import { DatePicker } from "@/components/ui/date-picker"
 import { DataTable } from "@/components/ui/data-table"
@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button"
 import { WorkoutSetCrud } from "./set-crud"
 import { columns } from "./columns"
 import { VCreateWorkout } from "@/lib/repositories/validators"
+import { trpc } from "@/lib/trpc/client/client"
 
 type TCreateWorkout = typeof VCreateWorkout._type
 
@@ -19,6 +20,8 @@ export function WorkoutCrud({
 }: {
 	initialState?: TCreateWorkout
 }) {
+	const { mutateAsync: postWorkout, isLoading: isPosting } =
+		trpc.workouts.createWorkout.useMutation()
 	const router = useRouter()
 	const [workout, setWorkout] = useState<TCreateWorkout>({
 		userId: "",
@@ -26,35 +29,22 @@ export function WorkoutCrud({
 		sets: [],
 		...initialState,
 	})
-	const [isPosting, setIsPosting] = useState(false)
 
 	const addSet = (set: TCreateWorkout["sets"][0]) =>
 		setWorkout({ ...workout, sets: [...workout.sets, set] })
 
 	const setDate = (date: Date) => setWorkout({ ...workout, date })
 
-	const postWorkout = async () => {
-		const { success: isWorkout } = await VCreateWorkout.safeParseAsync(
-			workout
-		)
-
-		if (!isWorkout) {
-			alert("not workout")
-			return
-		}
-
-		setIsPosting(true)
-		const res = await fetch("/api/workouts/create", {
-			body: JSON.stringify(workout),
-			method: "POST",
+	const createWorkout = async () => {
+		await postWorkout(workout, {
+			async onSettled(data, error, variables, context) {
+				alert("posted")
+				if (error) alert(error.message)
+				else {
+					await router.push("/dashboard")
+				}
+			},
 		})
-
-		if (res.ok) {
-			await router.push("/dashboard")
-			await router.refresh()
-		} else alert(res.statusText)
-
-		setIsPosting(false)
 	}
 
 	return (
@@ -83,7 +73,7 @@ export function WorkoutCrud({
 				<Button
 					className="w-full my-8"
 					disabled={workout.sets.length === 0 || isPosting}
-					onClick={postWorkout}
+					onClick={createWorkout}
 				>
 					{isPosting ? (
 						<Loader2Icon className="animate-spin mr-2" />
