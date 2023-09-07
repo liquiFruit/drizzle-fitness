@@ -1,44 +1,49 @@
 "use client"
 
-import { memo, useState } from "react"
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { CheckSquareIcon, Loader2, Loader2Icon } from "lucide-react"
 
 import { DatePicker } from "@/components/ui/date-picker"
+import { DataTable } from "@/components/ui/data-table"
+import { Button } from "@/components/ui/button"
+
 import { WorkoutSetCrud } from "./set-crud"
-import { WorkoutSet } from "@/db"
-import { DataTable } from "../ui/data-table"
 import { columns } from "./columns"
-import { Button } from "../ui/button"
-import { CheckSquareIcon } from "lucide-react"
-import { CRUDWorkoutSet, InsertFullWorkout } from "@/lib/validators/workout"
-import { revalidatePath } from "next/cache"
-import { redirect, useRouter } from "next/navigation"
+import { VCreateWorkout } from "@/lib/repositories/validators"
 
-interface FullWorkout {
-	date: number
-	sets: WorkoutSet[]
-}
+type TCreateWorkout = typeof VCreateWorkout._type
 
-type WorkoutCrudProps = {
-	initialState?: Partial<InsertFullWorkout>
-}
-export function WorkoutCrud({ initialState }: WorkoutCrudProps) {
-	// todo: check preformance by printing "rendering" for every set in sets
-	const [workout, setWorkout] = useState<InsertFullWorkout>({
-		date: Date.now(),
+export function WorkoutCrud({
+	initialState,
+}: {
+	initialState?: TCreateWorkout
+}) {
+	const router = useRouter()
+	const [workout, setWorkout] = useState<TCreateWorkout>({
+		userId: "",
+		date: new Date(),
 		sets: [],
 		...initialState,
 	})
+	const [isPosting, setIsPosting] = useState(false)
 
-	const router = useRouter()
-
-	const addSet = (set: CRUDWorkoutSet) =>
+	const addSet = (set: TCreateWorkout["sets"][0]) =>
 		setWorkout({ ...workout, sets: [...workout.sets, set] })
 
-	const setDate = (date: Date | undefined) => {
-		if (date) setWorkout({ ...workout, date: date.getTime() })
-	}
+	const setDate = (date: Date) => setWorkout({ ...workout, date })
 
 	const postWorkout = async () => {
+		const { success: isWorkout } = await VCreateWorkout.safeParseAsync(
+			workout
+		)
+
+		if (!isWorkout) {
+			alert("not workout")
+			return
+		}
+
+		setIsPosting(true)
 		const res = await fetch("/api/workouts/create", {
 			body: JSON.stringify(workout),
 			method: "POST",
@@ -47,7 +52,9 @@ export function WorkoutCrud({ initialState }: WorkoutCrudProps) {
 		if (res.ok) {
 			await router.push("/dashboard")
 			await router.refresh()
-		}
+		} else alert(res.statusText)
+
+		setIsPosting(false)
 	}
 
 	return (
@@ -60,7 +67,9 @@ export function WorkoutCrud({ initialState }: WorkoutCrudProps) {
 			<DatePicker
 				className="w-full"
 				date={new Date(workout.date)}
-				setDate={setDate}
+				setDate={(date) => {
+					if (date) setDate
+				}}
 			/>
 
 			{/* Exercise */}
@@ -73,10 +82,14 @@ export function WorkoutCrud({ initialState }: WorkoutCrudProps) {
 
 				<Button
 					className="w-full my-8"
-					disabled={workout.sets.length === 0}
+					disabled={workout.sets.length === 0 || isPosting}
 					onClick={postWorkout}
 				>
-					<CheckSquareIcon className="mr-2" />
+					{isPosting ? (
+						<Loader2Icon className="animate-spin mr-2" />
+					) : (
+						<CheckSquareIcon className="mr-2" />
+					)}
 					Create Workout
 				</Button>
 			</div>

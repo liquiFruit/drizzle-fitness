@@ -14,7 +14,7 @@ import { users } from "./auth"
 export const workouts = sqliteTable("workouts", {
   id: integer("id").primaryKey(),
   userId: text("user_id").notNull(),
-  date: integer("date", { mode: "timestamp_ms" }),
+  date: integer("date", { mode: "timestamp_ms" }).notNull(),
 })
 
 export const SelectWorkout = createSelectSchema(workouts)

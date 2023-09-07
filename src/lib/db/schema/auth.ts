@@ -6,6 +6,8 @@ import {
 } from "drizzle-orm/sqlite-core"
 import { createInsertSchema, createSelectSchema } from "drizzle-zod"
 import type { AdapterAccount } from "@auth/core/adapters"
+import { relations } from "drizzle-orm"
+import { workouts } from "./workouts"
 
 export const users = sqliteTable("user", {
   id: text("id").notNull().primaryKey(),
@@ -15,6 +17,10 @@ export const users = sqliteTable("user", {
   image: text("image"),
 })
 export const SelectUser = createSelectSchema(users)
+
+export const userRelations = relations(users, ({ many }) => ({
+  workouts: many(workouts)
+}))
 
 export const accounts = sqliteTable(
   "account",

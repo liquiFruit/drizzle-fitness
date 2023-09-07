@@ -1,12 +1,14 @@
-import { getWorkoutsByUserEmail } from "@/lib/db/getWorkouts"
+import { getWorkoutsByUserId } from "@/lib/repositories/getWorkouts"
 import { columns } from "./columns"
 import { DataTable } from "@/components/ui/data-table"
 import { Button } from "../ui/button"
 import { PlusSquareIcon } from "lucide-react"
 import Link from "next/link"
+import { useServerAuth } from "@/lib/auth/use-server-auth"
 
 export async function WorkoutTable() {
-	const workouts = await getWorkoutsByUserEmail("johnrprutton@gmail.com")
+	const session = await useServerAuth()
+	const workouts = await getWorkoutsByUserId(session?.user.id!)
 
 	return (
 		<div className="container mx-auto py-10">

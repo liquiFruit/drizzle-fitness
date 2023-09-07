@@ -1,56 +1,55 @@
-import { InsertWorkoutSet, db, users, workoutExercises, workoutSets, workouts } from "@/db"
-import { InsertFullWorkout } from "@/lib/validators/workout"
-import { eq } from "drizzle-orm"
+import { db } from "@/lib/db/index"
+import {
+  workouts,
+  SelectWorkout, workoutExercises,
+  workoutSets
+} from "@/lib/db/schema/workouts"
+import { VCreateWorkout } from "./validators"
 
-export async function createWorkout(userEmail: string, workout: InsertFullWorkout) {
-  // Check auth
-  const userId = (await db.query.users.findFirst({
-    where: eq(users.email, userEmail),
-  }))!.id
 
-  // Start transaction
+export async function createWorkout(
+  workout: typeof VCreateWorkout._type
+): Promise<typeof SelectWorkout._type | null> {
+  try {
+    // Extract exercises: map from exercise_id to workout_exercise_id (zero for now)
+    const exercises = new Map<number, number>()
+    workout.sets.forEach((set, i) => { exercises.set(set.workoutExerciseId, 0) })
 
-  // Insert workout
-  const [{ id: workoutId }] = await db
-    .insert(workouts)
-    .values({
-      date: workout.date,
-      userId,
-    }).returning()
+    // Start transaction
+    // Insert workout
+    const [insertedWorkout] = await db.insert(workouts).values(workout).returning()
 
-  // Extract exercises: map from exercise_id to workout_exercise_id (zero for now)
-  const exercises = new Map<string, number>()
-  workout.sets.forEach((set, i) => { exercises.set(set.workoutExerciseId, 0) })
+    // Insert workout exercises for the current workout
+    const insertedWorkoutExercises = await db
+      .insert(workoutExercises)
+      .values(
+        [...exercises.keys()].map((exercise) => ({
+          exerciseId: exercise,
+          workoutId: insertedWorkout.id,
+        }))
+      ).returning()
 
-  // Insert workout exercises for the current workout
-  const insertedWorkoutExercises = await db
-    .insert(workoutExercises)
-    .values(
-      [...exercises.keys()].map((exercise, i) => ({
-        exerciseId: exercise,
-        workoutId,
+    // Possible unit test? Check that exercises.size() === insertedWorkoutExercises.length
+    // Infer workout exercise IDs
+    insertedWorkoutExercises.forEach((insertedExercise, i) => {
+      exercises.set(insertedExercise.exerciseId, insertedExercise.id)
+    })
+
+    // Insert workout sets
+    const insertedSets = await db
+      .insert(workoutSets)
+      .values(workout.sets.map((set) => {
+        return {
+          ...set,
+          workoutExerciseId: exercises.get(set.workoutExerciseId)!
+        }
       }))
-    ).returning()
+      .returning()
 
-  // Possible unit test? Check that exercises.size() === insertedWorkoutExercises.length
-
-  // Infer workout exercise IDs
-  insertedWorkoutExercises.forEach((row, i) => {
-    exercises.set(row.exerciseId, row.id)
-  })
-  console.log(exercises)
-
-  // Insert workout sets
-  const insertedSets = await db
-    .insert(workoutSets)
-    .values(workout.sets.map((set, i) => {
-      return {
-        ...set,
-        workoutExerciseId: exercises.get(set.workoutExerciseId)!
-      }
-    }))
-    .returning()
-
-  return (insertedSets.length === workout.sets.length)
+    return insertedWorkout
+  } catch (error) {
+    console.log(error)
+    return null
+  }
 }
 

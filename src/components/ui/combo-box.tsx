@@ -18,24 +18,29 @@ import {
 	PopoverTrigger,
 } from "@/components/ui/popover"
 
-const frameworks = [
-	{
-		value: "pushups",
-		label: "Pushups",
-	},
-	{
-		value: "squats",
-		label: "Squats",
-	},
-]
-
-type ComboboxProps = {
+type ComboboxProps<T> = {
 	className?: string
-	value: string | null
-	setValue: (value: string) => void
+	options: { label: string; value: T }[]
+	value: T | null
+	setValue: (value: T) => void
 }
-export function Combobox({ value, setValue, className }: ComboboxProps) {
+
+export function Combobox<T extends React.Key>({
+	value,
+	setValue,
+	className,
+	options,
+}: ComboboxProps<T>) {
 	const [open, setOpen] = React.useState(false)
+
+	const handleSelection = (currentLabel: string) => {
+		setValue(
+			options.find(
+				(option) => option.label.toLowerCase() === currentLabel
+			)!.value
+		)
+		setOpen(false)
+	}
 
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
@@ -47,40 +52,32 @@ export function Combobox({ value, setValue, className }: ComboboxProps) {
 					className="w-full justify-between"
 				>
 					{value
-						? frameworks.find(
-								(framework) => framework.value === value
-						  )?.label
-						: "Select an exercise..."}
+						? options.find((option) => option.value === value)
+								?.label
+						: "Select an option..."}
 					<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
 				</Button>
 			</PopoverTrigger>
 
 			<PopoverContent className="p-0">
 				<Command>
-					<CommandInput placeholder="Search framework..." />
-					<CommandEmpty>No exercises found.</CommandEmpty>
+					<CommandInput placeholder="Search..." />
+					<CommandEmpty>No options found.</CommandEmpty>
 					<CommandGroup>
-						{frameworks.map((framework) => (
+						{options.map((option) => (
 							<CommandItem
-								key={framework.value}
-								onSelect={(currentValue) => {
-									setValue(
-										currentValue === value
-											? ""
-											: currentValue
-									)
-									setOpen(false)
-								}}
+								key={option.value}
+								onSelect={handleSelection}
 							>
 								<Check
 									className={cn(
 										"mr-2 h-4 w-4",
-										value === framework.value
+										value === option.value
 											? "opacity-100"
 											: "opacity-0"
 									)}
 								/>
-								{framework.label}
+								{option.label}
 							</CommandItem>
 						))}
 					</CommandGroup>

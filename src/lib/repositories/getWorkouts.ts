@@ -1,18 +1,12 @@
 import { eq } from "drizzle-orm"
 
-import { User, Workout, db, users } from "@/db"
+import { db } from "@/lib/db"
+import { SelectUser } from "@/lib/db/schema/auth"
+import { SelectWorkout, workouts } from "@/lib/db/schema/workouts"
 
+export async function getWorkoutsByUserId(
+  userId: typeof SelectUser._type["id"]
+): Promise<typeof SelectWorkout._type[]> {
 
-export async function getWorkoutsByUserEmail(email: User["email"]): Promise<Workout[]> {
-  const data = await db.query.users.findFirst({
-    where: eq(users.email, email), with: {
-      workouts: {
-        columns: { id: true, date: true }
-      }
-    }
-  })
-
-  if (!data) return []
-
-  return data.workouts
+  return await db.select().from(workouts).where(eq(workouts.userId, userId))
 }

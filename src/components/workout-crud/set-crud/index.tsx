@@ -1,8 +1,9 @@
 "use client"
 
-import * as z from "zod"
+import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import { CheckIcon, PlusIcon } from "lucide-react"
 
 import {
 	Form,
@@ -15,41 +16,41 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-
-import type { InsertWorkoutSet, WorkoutSet } from "@/db"
-import { CheckIcon, PlusIcon } from "lucide-react"
 import { Combobox } from "@/components/ui/combo-box"
-import { useRef, useState } from "react"
+
 import { cn } from "@/lib/utils"
-import { CRUDWorkoutSet } from "@/lib/validators/workout"
+import { InsertWorkoutSet } from "@/lib/db/schema/workouts"
 
-const formSchema = z.object({
-	workoutExerciseId: z.string().min(1, "Exercise type is required."),
-	order: z.union([z.number().int().positive(), z.nan()]).optional(),
-	details: z.number({ invalid_type_error: "Required" }).positive(),
-}) as z.ZodType<CRUDWorkoutSet>
-
+type TWorkoutSet = typeof InsertWorkoutSet._type
 type WorkoutSetCrudProps = {
-	onCreate: (set: CRUDWorkoutSet) => void
-	initialState: Partial<CRUDWorkoutSet>
+	onCreate: (set: TWorkoutSet) => void
+	initialState: Partial<TWorkoutSet>
 }
+
+const exercises = [
+	{ label: "Pushups", value: 1 },
+	{ label: "Situps", value: 2 },
+]
+
 export function WorkoutSetCrud({
 	onCreate,
 	initialState,
 }: WorkoutSetCrudProps) {
-	const form = useForm<CRUDWorkoutSet>({
+	const form = useForm<TWorkoutSet>({
 		// @ts-ignore
-		resolver: zodResolver(formSchema),
-		defaultValues: initialState,
+		resolver: zodResolver(InsertWorkoutSet),
+		defaultValues: { order: Date.now(), ...initialState },
 	})
 	const [adding, setAdding] = useState(false)
 
-	function onSubmit(values: CRUDWorkoutSet) {
+	function onSubmit(values: typeof InsertWorkoutSet._type) {
 		values = { ...values, order: Date.now() }
 		onCreate(values)
 		form.setValue("details", 0)
+		form.setValue("order", Date.now())
 
 		setAdding(true)
+		form.setFocus("details")
 		setTimeout(() => setAdding(false), 1000)
 	}
 
@@ -70,7 +71,8 @@ export function WorkoutSetCrud({
 								<FormMessage />
 							</div>
 							<FormControl>
-								<Combobox
+								<Combobox<number>
+									options={exercises}
 									value={field.value}
 									setValue={field.onChange}
 								/>

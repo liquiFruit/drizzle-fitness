@@ -1,19 +1,5 @@
-import NextAuth, { type NextAuthOptions } from "next-auth"
-import { DrizzleAdapter } from "@auth/drizzle-adapter"
-import { db, type User } from "@/db"
-
-import GithubProvider from "next-auth/providers/github"
-
-
-export const authOptions: NextAuthOptions = {
-  adapter: DrizzleAdapter(db),
-  providers: [
-    GithubProvider({
-      clientId: process.env.GITHUB_ID!,
-      clientSecret: process.env.GITHUB_SECERT!,
-    })
-  ]
-}
+import { authOptions } from "@/lib/auth/auth-options"
+import NextAuth from "next-auth"
 
 const handler = NextAuth(authOptions)
 
