@@ -1,8 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # db
-src/db/db.sqlite
-src/db/migrations/
+db.sqlite
 
 # dependencies
 /node_modules

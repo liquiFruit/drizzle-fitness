@@ -5,7 +5,6 @@ import { WorkoutTable } from "@/components/workout-table"
 export default async function Dashboard() {
 	const session = await useServerAuth()
 	if (!session?.user) redirect("/")
-
 	return (
 		<main>
 			<WorkoutTable />
