@@ -20,6 +20,7 @@ import { Combobox } from "@/components/ui/combo-box"
 
 import { cn } from "@/lib/utils"
 import { InsertWorkoutSet } from "@/lib/db/schema/workouts"
+import { trpc } from "@/lib/trpc/client/client"
 
 type TWorkoutSet = typeof InsertWorkoutSet._type
 type WorkoutSetCrudProps = {
@@ -36,6 +37,8 @@ export function WorkoutSetCrud({
 	onCreate,
 	initialState,
 }: WorkoutSetCrudProps) {
+	const { data: exercises, failureReason } =
+		trpc.exercises.getExercises.useQuery()
 	const form = useForm<TWorkoutSet>({
 		// @ts-ignore
 		resolver: zodResolver(InsertWorkoutSet),
@@ -72,7 +75,12 @@ export function WorkoutSetCrud({
 							</div>
 							<FormControl>
 								<Combobox<number>
-									options={exercises}
+									options={
+										exercises?.map(({ id, name }) => ({
+											label: name,
+											value: id,
+										})) ?? []
+									}
 									value={field.value}
 									setValue={field.onChange}
 								/>

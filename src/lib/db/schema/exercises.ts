@@ -7,7 +7,7 @@ import { createSelectSchema, createInsertSchema } from "drizzle-zod"
 
 export const exercises = sqliteTable("exercises", {
   id: integer("id").primaryKey(),
-  name: text("name"),
+  name: text("name").notNull(),
 })
 
 export const SelectExercise = createSelectSchema(exercises)
