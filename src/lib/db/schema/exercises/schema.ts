@@ -5,6 +5,7 @@ import {
   text
 } from "drizzle-orm/sqlite-core"
 import { createSelectSchema, createInsertSchema } from "drizzle-zod"
+import { z } from "zod"
 
 export const exercises = sqliteTable("exercises", {
   id: integer("id").primaryKey(),
@@ -14,4 +15,6 @@ export const exercises = sqliteTable("exercises", {
 })
 
 export const SelectExercise = createSelectSchema(exercises)
-export const InsertExercise = createInsertSchema(exercises)
+export const InsertExercise = createInsertSchema(exercises).extend({
+  muscleGroups: z.number().int().array().min(1, "Exercise requires at least one muscle group.")
+})
