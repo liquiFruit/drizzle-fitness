@@ -3,7 +3,13 @@
 import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { CheckIcon, PlusIcon } from "lucide-react"
+import {
+	ArrowLeftFromLineIcon,
+	ArrowRightFromLineIcon,
+	ArrowRightIcon,
+	CheckIcon,
+	PlusIcon,
+} from "lucide-react"
 
 import {
 	Form,
@@ -21,6 +27,7 @@ import { Combobox } from "@/components/ui/combo-box"
 import { cn } from "@/lib/utils"
 import { InsertWorkoutSet } from "@/lib/db/schema/workouts"
 import { trpc } from "@/lib/trpc/client/client"
+import Link from "next/link"
 
 type TWorkoutSet = typeof InsertWorkoutSet._type
 type WorkoutSetCrudProps = {
@@ -78,7 +85,20 @@ export function WorkoutSetCrud({
 									}
 									value={field.value}
 									setValue={field.onChange}
-								/>
+								>
+									<div>
+										<p>No exercises found.</p>
+										<Link href="/exercises/create">
+											<Button variant={"link"}>
+												Create an exercise
+												<ArrowRightIcon
+													className="ml-2"
+													size={14}
+												/>
+											</Button>
+										</Link>
+									</div>
+								</Combobox>
 							</FormControl>
 						</FormItem>
 					)}

@@ -1,6 +1,6 @@
 import { getExercises } from "@/lib/repositories/exercises/getExercises"
 
-export async function ExercisePage() {
+export default async function ExercisePage() {
 	const exercises = await getExercises()
 	return (
 		<div className="flex flex-col gap-2">
