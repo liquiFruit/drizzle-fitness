@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { XIcon } from "lucide-react"
@@ -101,7 +102,16 @@ export function CreateExercise({
 										field.value.push(v)
 										field.onChange(field.value)
 									}}
-								/>
+								>
+									<div>
+										<p>No muscle groups found</p>
+										<Link href="/muscles/create">
+											<Button variant={"link"}>
+												Create a muscle group
+											</Button>
+										</Link>
+									</div>
+								</Combobox>
 							</FormControl>
 							<div className="flex flex-row flex-wrap gap-2">
 								{field.value.map((muscleID) => (

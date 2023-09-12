@@ -3,9 +3,9 @@ import { muscleGroups } from "@/lib/db/schema/exercises/muscleGroups";
 import { exercises, type InsertExercise } from "@/lib/db/schema/exercises/schema";
 import { eq } from "drizzle-orm";
 
-type ResultStatus = "Success" | "NameExists" | "InternalError"
+type Result = "NameExists" | DbResultStatus
 
-export async function createExercises({ muscleGroups: exerciseMuscles, ...newExercise }: typeof InsertExercise._type): Promise<ResultStatus> {
+export async function createExercises({ muscleGroups: exerciseMuscles, ...newExercise }: typeof InsertExercise._type): Promise<Result> {
   try {
     // Check
     const matches = await db
