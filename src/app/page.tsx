@@ -1,7 +1,12 @@
 import Image from "next/image"
 import img from "@/../public/hero_img.png"
+import { getUserAuth } from "@/lib/auth/utils"
+import { redirect } from "next/navigation"
 
 export default async function Home() {
+	const { session } = await getUserAuth()
+	if (session?.user) redirect("/dashboard")
+
 	return (
 		<main>
 			<div className="relative drop-shadow-lg  drop-shadow-color-primary/30 mx-auto max-w-75% overflow-hidden brightness-80 aspect-square rounded-full">

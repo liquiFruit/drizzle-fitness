@@ -28,11 +28,6 @@ type WorkoutSetCrudProps = {
 	initialState: Partial<TWorkoutSet>
 }
 
-const exercises = [
-	{ label: "Pushups", value: 1 },
-	{ label: "Situps", value: 2 },
-]
-
 export function WorkoutSetCrud({
 	onCreate,
 	initialState,
