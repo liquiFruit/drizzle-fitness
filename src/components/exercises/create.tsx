@@ -31,7 +31,6 @@ export function CreateExercise({
 	const { mutateAsync: createExercise } =
 		trpc.exercises.createExercise.useMutation()
 	const { data: muscles } = trpc.muscles.getMuscles.useQuery()
-	const { refetch: refetchExercises } = trpc.exercises.getExercises.useQuery()
 
 	const router = useRouter()
 	const muscleMap = new Map<number, string>(
@@ -52,8 +51,8 @@ export function CreateExercise({
 		const r = await createExercise(values)
 
 		if (r === "Success") {
-			await refetchExercises()
 			router.push("/exercises")
+			router.refresh()
 		} else if (r === "NameExists")
 			alert("Exercise with that name already exists.")
 		else if (r === "InternalError")
