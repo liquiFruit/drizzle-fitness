@@ -1,28 +1,36 @@
-import { db } from "@/lib/db";
-import { exerciseMuscles } from "@/lib/db/schema/exercises/muscleGroups";
-import { exercises, type InsertExercise } from "@/lib/db/schema/exercises/schema";
-import { eq } from "drizzle-orm";
+import { SqliteError } from "better-sqlite3"
+
+import { db } from "@/lib/db"
+import { exerciseMuscles } from "@/lib/db/schema/exercises/muscleGroups"
+import { exercises } from "@/lib/db/schema/exercises/schema"
+
+import { VCreateExercise } from "@/lib/repositories/validators"
 
 type Result = "NameExists" | DbResultStatus
 
-export async function createExercises({ muscleGroups: muscles, ...newExercise }: typeof InsertExercise._type): Promise<Result> {
+export async function createExercises({
+  muscles, ...newExercise
+}: typeof VCreateExercise._type): Promise<Result> {
   try {
-    // Check
-    const matches = await db
-      .select({ id: exercises.id })
-      .from(exercises).where(eq(exercises.name, newExercise.name))
+    const { lastInsertRowid: exerciseID } = await db
+      .insert(exercises)
+      .values(newExercise)
 
-    if (matches.length !== 0) return "NameExists"
-
-    const { lastInsertRowid: exerciseID } = await db.insert(exercises).values(newExercise)
-    const { changes } = await db.insert(exerciseMuscles).values(muscles.map((muscleID) => ({
-      exerciseId: exerciseID as number,
-      muscleId: muscleID
-    })))
+    const { changes } = await db
+      .insert(exerciseMuscles)
+      .values(muscles.map(muscleID => ({
+        exerciseId: exerciseID as number,
+        muscleId: muscleID as number
+      })))
 
     return "Success"
   } catch (error) {
-    console.log(error)
+    if (error instanceof SqliteError) {
+      if (error.code === "SQLITE_CONSTRAINT_UNIQUE")
+        return "NameExists"
+    }
+
+    console.log("error:", error)
     return "InternalError"
   }
 }

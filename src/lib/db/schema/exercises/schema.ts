@@ -10,7 +10,7 @@ import { exerciseMuscles } from "./muscleGroups"
 
 export const exercises = sqliteTable("exercises", {
   id: integer("id").primaryKey(),
-  name: text("name").notNull(),
+  name: text("name").notNull().unique(),
   cpu: real("calories_per_unit").notNull(),
   unit: text("unit").notNull()
 })

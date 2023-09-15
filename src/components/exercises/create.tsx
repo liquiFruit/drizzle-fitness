@@ -3,15 +3,16 @@
 import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import type { inferProcedureInput } from "@trpc/server"
 import { XIcon } from "lucide-react"
 
-import { InsertExercise } from "@/lib/db/schema/exercises/schema"
 import { trpc } from "@/lib/trpc/client/client"
+import type { AppRouter } from "@/lib/trpc/server/routers/_app"
+import { VCreateExercise } from "@/lib/repositories/validators"
 
 import {
 	Form,
 	FormControl,
-	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
@@ -20,34 +21,34 @@ import {
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Combobox } from "@/components/ui/combo-box"
-import { Badge } from "../ui/badge"
+import { Badge } from "@/components/ui/badge"
 import { useRouter } from "next/navigation"
 
-export function CreateExercise({
-	initialState,
-}: {
-	initialState: Partial<typeof InsertExercise._type>
-}) {
+type T = inferProcedureInput<AppRouter["exercises"]["createExercise"]>
+
+export function CreateExercise({ initialState }: { initialState: Partial<T> }) {
 	const { mutateAsync: createExercise } =
 		trpc.exercises.createExercise.useMutation()
+
 	const { data: muscles } = trpc.muscles.getMuscles.useQuery()
 
 	const router = useRouter()
-	const muscleMap = new Map<number, string>(
-		muscles?.map(({ id, name }) => [id, name])
-	)
 
-	const form = useForm<typeof InsertExercise._type>({
+	const form = useForm<T>({
 		// @ts-ignore
-		resolver: zodResolver(InsertExercise),
+		resolver: zodResolver(VCreateExercise),
 		defaultValues: {
-			muscleGroups: [],
+			muscles: [],
 			unit: "reps",
 			...initialState,
 		},
 	})
 
-	async function onSubmit(values: typeof InsertExercise._type) {
+	const muscleMap = new Map<number, string>(
+		muscles?.map(({ id, name }) => [id, name])
+	)
+
+	async function onSubmit(values: T) {
 		const r = await createExercise(values)
 
 		if (r === "Success") {
@@ -83,7 +84,7 @@ export function CreateExercise({
 
 				<FormField
 					control={form.control}
-					name="muscleGroups"
+					name="muscles"
 					render={({ field, fieldState: { error } }) => (
 						<FormItem className="w-full">
 							<FormLabel>Target Muscle Groups</FormLabel>

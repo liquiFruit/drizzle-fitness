@@ -4,8 +4,8 @@ import { exercises } from "./schema"
 import { muscles } from "../muscles"
 
 export const exerciseMuscles = sqliteTable("exercise_muscles", {
-  exerciseId: integer("exercise_id").notNull().references(() => exercises.id),
-  muscleId: integer("muscle_id").notNull().references(() => muscles.id),
+  exerciseId: integer("exercise_id").notNull().references(() => exercises.id, { onDelete: "cascade" }),
+  muscleId: integer("muscle_id").notNull().references(() => muscles.id, { onDelete: "cascade" }),
 }, (t) => ({
   pk: primaryKey(t.exerciseId, t.muscleId)
 }))
