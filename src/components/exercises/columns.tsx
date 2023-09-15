@@ -12,9 +12,10 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { ColumnHeader } from "@/components/ui/data-table/column-header"
-import type { SelectExercise } from "@/lib/db/schema/exercises/schema"
 
-export const exerciseColumns: ColumnDef<typeof SelectExercise._type>[] = [
+import type { TExercise } from "@/lib/repositories/exercises/getExercises"
+
+export const exerciseColumns: ColumnDef<TExercise>[] = [
 	{
 		accessorKey: "cpu",
 		header: ({ column }) => (
@@ -48,7 +49,7 @@ export const exerciseColumns: ColumnDef<typeof SelectExercise._type>[] = [
 	},
 ]
 
-function ExerciseCell({ exercise }: { exercise: typeof SelectExercise._type }) {
+function ExerciseCell({ exercise }: { exercise: TExercise }) {
 	return (
 		<div className="select-none">
 			<p className="font-medium">{exercise.name}</p>

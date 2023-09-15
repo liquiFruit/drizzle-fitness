@@ -88,15 +88,15 @@ export function WorkoutSetCrud({
 								>
 									<div>
 										<p>No exercises found.</p>
-										<Link href="/exercises/create">
-											<Button variant={"link"}>
+										<Button variant={"link"} asChild>
+											<Link href="/exercises/create">
 												Create an exercise
 												<ArrowRightIcon
 													className="ml-2"
 													size={14}
 												/>
-											</Button>
-										</Link>
+											</Link>
+										</Button>
 									</div>
 								</Combobox>
 							</FormControl>

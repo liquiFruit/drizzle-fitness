@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm"
 import {
   integer,
   real,
@@ -5,7 +6,7 @@ import {
   text
 } from "drizzle-orm/sqlite-core"
 import { createSelectSchema, createInsertSchema } from "drizzle-zod"
-import { z } from "zod"
+import { exerciseMuscles } from "./muscleGroups"
 
 export const exercises = sqliteTable("exercises", {
   id: integer("id").primaryKey(),
@@ -14,8 +15,9 @@ export const exercises = sqliteTable("exercises", {
   unit: text("unit").notNull()
 })
 
+export const exerciseRelations = relations(exercises, ({ many }) => ({
+  muscleGroups: many(exerciseMuscles),
+}))
+
 export const SelectExercise = createSelectSchema(exercises)
-export const InsertExercise = createInsertSchema(exercises).extend({
-  cpu: z.number().positive(),
-  muscleGroups: z.number().int().array().min(1, "Exercise requires at least one muscle group.")
-})
+export const InsertExercise = createInsertSchema(exercises)

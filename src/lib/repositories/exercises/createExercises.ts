@@ -1,11 +1,11 @@
 import { db } from "@/lib/db";
-import { muscleGroups } from "@/lib/db/schema/exercises/muscleGroups";
+import { exerciseMuscles } from "@/lib/db/schema/exercises/muscleGroups";
 import { exercises, type InsertExercise } from "@/lib/db/schema/exercises/schema";
 import { eq } from "drizzle-orm";
 
 type Result = "NameExists" | DbResultStatus
 
-export async function createExercises({ muscleGroups: exerciseMuscles, ...newExercise }: typeof InsertExercise._type): Promise<Result> {
+export async function createExercises({ muscleGroups: muscles, ...newExercise }: typeof InsertExercise._type): Promise<Result> {
   try {
     // Check
     const matches = await db
@@ -15,7 +15,7 @@ export async function createExercises({ muscleGroups: exerciseMuscles, ...newExe
     if (matches.length !== 0) return "NameExists"
 
     const { lastInsertRowid: exerciseID } = await db.insert(exercises).values(newExercise)
-    const { changes } = await db.insert(muscleGroups).values(exerciseMuscles.map((muscleID) => ({
+    const { changes } = await db.insert(exerciseMuscles).values(muscles.map((muscleID) => ({
       exerciseId: exerciseID as number,
       muscleId: muscleID
     })))
