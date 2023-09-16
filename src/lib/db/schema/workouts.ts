@@ -13,7 +13,8 @@ import { users } from "./auth"
 
 export const workouts = sqliteTable("workouts", {
   id: integer("id").primaryKey(),
-  userId: text("user_id").notNull(),
+  userId: text("user_id").notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
   date: integer("date", { mode: "timestamp_ms" }).notNull(),
 })
 
