@@ -6,7 +6,7 @@ import {
 } from "drizzle-orm/sqlite-core"
 import { createInsertSchema, createSelectSchema } from "drizzle-zod"
 
-import { users } from "@/lib/db/schema/auth"
+import { users } from "../auth"
 import { workoutExercises } from "./workoutExercises.schema"
 import { workoutsOnMuscles } from "./workoutsOnMuscles.schema"
 
