@@ -1,10 +1,12 @@
 import { db } from "@/lib/db/index"
 import {
   workouts,
-  SelectWorkout, workoutExercises,
-  workoutSets
-} from "@/lib/db/schema/workouts"
-import { VCreateWorkout } from "./validators"
+  workoutExercises,
+  workoutSets,
+  SelectWorkout
+} from "@/lib/db/schema/workouts/schema"
+
+import { VCreateWorkout } from "../validators"
 
 
 export async function createWorkout(

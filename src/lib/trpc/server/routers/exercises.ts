@@ -1,7 +1,8 @@
 import { protectedProcedure, router } from "../trpc"
-import { getExercises } from "@/lib/repositories/exercises/getExercises"
-import { createExercises } from "@/lib/repositories/exercises/createExercises"
+
+import { getExercises, createExercises } from "@/lib/repositories/exercises/controller"
 import { VCreateExercise } from "@/lib/repositories/validators"
+
 
 export const exercisesRouter = router({
   getExercises: protectedProcedure.query(

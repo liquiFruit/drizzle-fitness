@@ -1,7 +1,8 @@
-import { getWorkoutsByUserId } from "@/lib/repositories/getWorkouts"
 import { protectedProcedure, router } from "../trpc"
+
+import { createWorkout, getWorkoutsByUserId } from "@/lib/repositories/workouts/controller"
 import { VCreateWorkout } from "@/lib/repositories/validators"
-import { createWorkout } from "@/lib/repositories/createWorkout"
+
 
 export const workoutsRouter = router({
   getWorkouts: protectedProcedure.query(async ({ ctx }) => {

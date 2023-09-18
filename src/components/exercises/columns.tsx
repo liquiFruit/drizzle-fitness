@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { ColumnHeader } from "@/components/ui/data-table/column-header"
 
-import type { TExercise } from "@/lib/repositories/exercises/getExercises"
+import type { TExercise } from "@/lib/repositories/exercises/controller"
 
 export const exerciseColumns: ColumnDef<TExercise>[] = [
 	{

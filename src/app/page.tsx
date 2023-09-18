@@ -1,7 +1,9 @@
-import Image from "next/image"
-import img from "@/../public/hero_img.png"
-import { getUserAuth } from "@/lib/auth/utils"
 import { redirect } from "next/navigation"
+import Image from "next/image"
+
+import { getUserAuth } from "@/lib/auth/utils"
+
+import img from "@/../public/hero_img.png"
 
 export default async function Home() {
 	const { session } = await getUserAuth()

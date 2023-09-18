@@ -4,10 +4,12 @@ import {
   text,
   primaryKey,
 } from "drizzle-orm/sqlite-core"
-import { createInsertSchema, createSelectSchema } from "drizzle-zod"
-import type { AdapterAccount } from "@auth/core/adapters"
 import { relations } from "drizzle-orm"
-import { workouts } from "./workouts"
+import { createSelectSchema } from "drizzle-zod"
+import type { AdapterAccount } from "@auth/core/adapters"
+
+import { workouts } from "./workouts/schema"
+
 
 export const users = sqliteTable("user", {
   id: text("id").notNull().primaryKey(),

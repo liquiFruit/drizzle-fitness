@@ -1,9 +1,10 @@
+import { PlusIcon } from "lucide-react"
+import Link from "next/link"
+
 import { exerciseColumns } from "@/components/exercises/columns"
 import { Button } from "@/components/ui/button"
 import { DataTable } from "@/components/ui/data-table"
-import { getExercises } from "@/lib/repositories/exercises/getExercises"
-import { PlusIcon } from "lucide-react"
-import Link from "next/link"
+import { getExercises } from "@/lib/repositories/exercises/controller"
 
 export default async function ExercisePage() {
 	const exercises = await getExercises()

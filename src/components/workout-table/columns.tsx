@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { MoreHorizontal } from "lucide-react"
 
-import { Workout } from "@/db"
+import type { SelectWorkout } from "@/lib/db/schema/workouts/schema"
 import { fuzyTime } from "@/lib/utils"
 
 import { Button } from "@/components/ui/button"
@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { ColumnHeader } from "@/components/ui/data-table/column-header"
 
-export const columns: ColumnDef<Workout>[] = [
+export const columns: ColumnDef<typeof SelectWorkout._type>[] = [
 	{
 		accessorKey: "id",
 		header: ({ column }) => <ColumnHeader column={column} title="ID" />,

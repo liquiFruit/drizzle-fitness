@@ -1,15 +1,11 @@
 "use client"
 
 import { useState } from "react"
+import { trpc } from "@/lib/trpc/client/client"
+import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import {
-	ArrowLeftFromLineIcon,
-	ArrowRightFromLineIcon,
-	ArrowRightIcon,
-	CheckIcon,
-	PlusIcon,
-} from "lucide-react"
+import { ArrowRightIcon, CheckIcon, PlusIcon } from "lucide-react"
 
 import {
 	Form,
@@ -25,9 +21,7 @@ import { Button } from "@/components/ui/button"
 import { Combobox } from "@/components/ui/combo-box"
 
 import { cn } from "@/lib/utils"
-import { InsertWorkoutSet } from "@/lib/db/schema/workouts"
-import { trpc } from "@/lib/trpc/client/client"
-import Link from "next/link"
+import { InsertWorkoutSet } from "@/lib/db/schema/workouts/schema"
 
 type TWorkoutSet = typeof InsertWorkoutSet._type
 type WorkoutSetCrudProps = {
