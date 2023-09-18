@@ -25,7 +25,7 @@ import { Button } from "@/components/ui/button"
 import { Combobox } from "@/components/ui/combo-box"
 
 import { cn } from "@/lib/utils"
-import { InsertWorkoutSet } from "@/lib/db/schema/workouts"
+import { InsertWorkoutSet } from "@/lib/db/schema/workouts/workout.schema"
 import { trpc } from "@/lib/trpc/client/client"
 import Link from "next/link"
 

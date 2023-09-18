@@ -12,7 +12,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { ColumnHeader } from "@/components/ui/data-table/column-header"
-import { InsertWorkoutSet } from "@/lib/db/schema/workouts"
+import { InsertWorkoutSet } from "@/lib/db/schema/workouts/workout.schema"
 
 export const columns: ColumnDef<typeof InsertWorkoutSet._type>[] = [
 	{

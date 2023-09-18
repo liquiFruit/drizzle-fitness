@@ -3,7 +3,7 @@ import {
   workouts,
   SelectWorkout, workoutExercises,
   workoutSets
-} from "@/lib/db/schema/workouts"
+} from "@/lib/db/schema/workouts/workout.schema"
 import { VCreateWorkout } from "./validators"
 
 
