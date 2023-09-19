@@ -7,7 +7,7 @@ import { createInsertSchema, createSelectSchema } from "drizzle-zod"
 
 import { workouts } from "./workouts.schema"
 import { workoutSets } from "./worktoutSets.schema"
-import { exercises } from "../exercises/exercises.schema"
+import { exercises } from "../exercises/exercises.table"
 
 
 export const workoutExercises = sqliteTable("workout_exercises", {

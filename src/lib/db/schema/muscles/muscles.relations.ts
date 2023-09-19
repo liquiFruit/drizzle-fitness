@@ -1,7 +1,7 @@
 import { relations } from "drizzle-orm"
 
 import { muscles } from "./muscles.table"
-import { exercisesOnMuscles } from "../exercises/exercisesOnMuscles.schema"
+import { exercisesOnMuscles } from "../exercises/exercisesOnMuscles.table"
 import { workoutsOnMuscles } from "../workouts/workoutsOnMuscles.schema"
 
 export const musclesRelations = relations(muscles, ({ many }) => ({
