@@ -1,4 +1,3 @@
-import { relations } from "drizzle-orm"
 import {
   integer,
   sqliteTable,
@@ -7,8 +6,6 @@ import {
 import { createInsertSchema, createSelectSchema } from "drizzle-zod"
 
 import { users } from "../auth"
-import { workoutExercises } from "./workoutExercises.schema"
-import { workoutsOnMuscles } from "./workoutsOnMuscles.schema"
 
 
 export const workouts = sqliteTable("workouts", {
@@ -20,14 +17,3 @@ export const workouts = sqliteTable("workouts", {
 
 export const SelectWorkout = createSelectSchema(workouts)
 export const InsertWorkout = createInsertSchema(workouts)
-
-export const workoutsRelations = relations(workouts, ({ one, many }) => ({
-  users: one(users, {
-    fields: [workouts.userId],
-    references: [users.id]
-  }),
-
-  workoutExercises: many(workoutExercises),
-
-  workoutMuscles: many(workoutsOnMuscles)
-}))
