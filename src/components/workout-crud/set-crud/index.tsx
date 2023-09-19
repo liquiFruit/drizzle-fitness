@@ -1,9 +1,11 @@
 "use client"
 
 import { useState } from "react"
+import { trpc } from "@/lib/trpc/client/client"
+import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { CheckIcon, PlusIcon } from "lucide-react"
+import { ArrowRightIcon, CheckIcon, PlusIcon } from "lucide-react"
 
 import {
 	Form,
@@ -19,7 +21,7 @@ import { Button } from "@/components/ui/button"
 import { Combobox } from "@/components/ui/combo-box"
 
 import { cn } from "@/lib/utils"
-import { InsertWorkoutSet } from "@/lib/db/schema/workouts"
+import { InsertWorkoutSet } from "@/lib/db/schema/workouts/schema"
 
 type TWorkoutSet = typeof InsertWorkoutSet._type
 type WorkoutSetCrudProps = {
@@ -27,15 +29,12 @@ type WorkoutSetCrudProps = {
 	initialState: Partial<TWorkoutSet>
 }
 
-const exercises = [
-	{ label: "Pushups", value: 1 },
-	{ label: "Situps", value: 2 },
-]
-
 export function WorkoutSetCrud({
 	onCreate,
 	initialState,
 }: WorkoutSetCrudProps) {
+	const { data: exercises, failureReason } =
+		trpc.exercises.getExercises.useQuery()
 	const form = useForm<TWorkoutSet>({
 		// @ts-ignore
 		resolver: zodResolver(InsertWorkoutSet),
@@ -72,10 +71,28 @@ export function WorkoutSetCrud({
 							</div>
 							<FormControl>
 								<Combobox<number>
-									options={exercises}
+									options={
+										exercises?.map(({ id, name }) => ({
+											label: name,
+											value: id,
+										})) ?? []
+									}
 									value={field.value}
 									setValue={field.onChange}
-								/>
+								>
+									<div>
+										<p>No exercises found.</p>
+										<Button variant={"link"} asChild>
+											<Link href="/exercises/create">
+												Create an exercise
+												<ArrowRightIcon
+													className="ml-2"
+													size={14}
+												/>
+											</Link>
+										</Button>
+									</div>
+								</Combobox>
 							</FormControl>
 						</FormItem>
 					)}

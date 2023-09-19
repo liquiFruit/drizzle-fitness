@@ -13,47 +13,23 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { ColumnHeader } from "@/components/ui/data-table/column-header"
 
-import { InsertWorkoutSet } from "@/lib/db/schema/workouts/schema"
+import type { TExercise } from "@/lib/repositories/exercises/controller"
 
-export const columns: ColumnDef<typeof InsertWorkoutSet._type>[] = [
+export const exerciseColumns: ColumnDef<TExercise>[] = [
 	{
-		accessorKey: "order",
-		header: ({ column }) => <ColumnHeader column={column} title="#" />,
-	},
-	{
-		accessorKey: "workoutExerciseId",
+		accessorKey: "cpu",
 		header: ({ column }) => (
 			<ColumnHeader column={column} title="Exercise" />
 		),
 		cell: ({ row }) => {
-			return (
-				<div className="font-medium">
-					{row.getValue("workoutExerciseId")}
-				</div>
-			)
-		},
-	},
-	{
-		accessorKey: "details",
-		header: ({ column }) => (
-			<ColumnHeader
-				className="justify-end"
-				column={column}
-				title="Details"
-			/>
-		),
-		cell: ({ row }) => {
-			return (
-				<div className="text-right font-medium">
-					{row.getValue("details")}
-				</div>
-			)
+			return <ExerciseCell exercise={row.original} />
 		},
 	},
 	{
 		id: "actions",
+		// header: () => <div className="w-fit">Actions</div>,
 		cell: ({ row }) => {
-			const workout = row.original
+			const exercise = row.original
 
 			return (
 				<DropdownMenu>
@@ -72,3 +48,15 @@ export const columns: ColumnDef<typeof InsertWorkoutSet._type>[] = [
 		},
 	},
 ]
+
+function ExerciseCell({ exercise }: { exercise: TExercise }) {
+	return (
+		<div className="select-none">
+			<p className="font-medium">{exercise.name}</p>
+			<div className="flex flex-row flex-wrap gap-2 font-200 text-light/50">
+				<p>Cal: {exercise.cpu}/unit</p>
+				<p>Units: {exercise.unit}</p>
+			</div>
+		</div>
+	)
+}

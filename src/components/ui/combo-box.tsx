@@ -23,6 +23,7 @@ type ComboboxProps<T> = {
 	options: { label: string; value: T }[]
 	value: T | null
 	setValue: (value: T) => void
+	children?: React.ReactNode
 }
 
 export function Combobox<T extends React.Key>({
@@ -30,6 +31,7 @@ export function Combobox<T extends React.Key>({
 	setValue,
 	className,
 	options,
+	children,
 }: ComboboxProps<T>) {
 	const [open, setOpen] = React.useState(false)
 
@@ -62,7 +64,9 @@ export function Combobox<T extends React.Key>({
 			<PopoverContent className="p-0">
 				<Command>
 					<CommandInput placeholder="Search..." />
-					<CommandEmpty>No options found.</CommandEmpty>
+					<CommandEmpty>
+						{children ?? "No options found."}
+					</CommandEmpty>
 					<CommandGroup>
 						{options.map((option) => (
 							<CommandItem

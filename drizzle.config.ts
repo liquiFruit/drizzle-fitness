@@ -1,8 +1,8 @@
-import type { Config } from "drizzle-kit"
 import "dotenv/config"
+import type { Config } from "drizzle-kit"
 
 export default {
-  schema: "./src/lib/db/schema/**/*",
+  schema: ["./src/lib/db/schema/**/*"],
   out: "./src/db/migrations",
   driver: "better-sqlite",
   dbCredentials: {
