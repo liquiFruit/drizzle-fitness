@@ -1,4 +1,5 @@
 import { relations } from "drizzle-orm"
+
 import { workoutsOnMuscles } from "./workoutsOnMuscles.table"
 import { muscles } from "../muscles/muscles.table"
 import { workouts } from "./workouts.table"

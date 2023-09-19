@@ -1,7 +1,7 @@
 import { integer, primaryKey, sqliteTable } from "drizzle-orm/sqlite-core"
 
 import { exercises } from "./exercises.table"
-import { muscles } from "../muscles/schema"
+import { muscles } from "../muscles/muscles.table"
 
 
 export const exercisesOnMuscles = sqliteTable("exercise_on_muscles",

@@ -7,6 +7,5 @@ export * from "./workoutExercises.relations"
 export * from "./workoutSets.table"
 export * from "./workoutSets.relations"
 
-
 export * from "./workoutsOnMuscles.table"
 export * from "./workoutsOnMuscles.relations"
