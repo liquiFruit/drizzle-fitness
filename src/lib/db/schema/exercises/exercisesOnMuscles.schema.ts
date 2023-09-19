@@ -2,7 +2,7 @@ import { integer, primaryKey, sqliteTable } from "drizzle-orm/sqlite-core"
 import { relations } from "drizzle-orm"
 
 import { exercises } from "./exercises.schema"
-import { muscles } from "../muscles"
+import { muscles } from "../muscles/schema"
 
 
 export const exercisesOnMuscles = sqliteTable("exercise_on_muscles",

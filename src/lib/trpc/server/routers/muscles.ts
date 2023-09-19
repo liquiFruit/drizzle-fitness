@@ -1,6 +1,6 @@
 import { getAllMuscles } from "@/lib/repositories/muscles/get"
 import { protectedProcedure, router } from "../trpc"
-import { InsertMuscleSchema } from "@/lib/db/schema/muscles"
+import { InsertMuscleSchema } from "@/lib/db/schema/muscles/schema"
 import { createMuscleGroup } from "@/lib/repositories/muscles/create"
 
 export const musclesRouter = router({

@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { InsertMuscleSchema, muscles } from "@/lib/db/schema/muscles";
+import { InsertMuscleSchema, muscles } from "@/lib/db/schema/muscles/schema";
 import { SqliteError } from "better-sqlite3"
 type Result = "NameExists" | DbResultStatus
 
