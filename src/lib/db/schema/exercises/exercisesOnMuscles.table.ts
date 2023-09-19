@@ -1,8 +1,7 @@
 import { integer, primaryKey, sqliteTable } from "drizzle-orm/sqlite-core"
-import { relations } from "drizzle-orm"
 
-import { exercises } from "./exercises.schema"
-import { muscles } from "../muscles"
+import { exercises } from "./exercises.table"
+import { muscles } from "../muscles/muscles.table"
 
 
 export const exercisesOnMuscles = sqliteTable("exercise_on_muscles",
@@ -20,15 +19,3 @@ export const exercisesOnMuscles = sqliteTable("exercise_on_muscles",
     pk: primaryKey(t.exerciseId, t.muscleId)
   })
 )
-
-export const exerciseMusclesRelations = relations(exercisesOnMuscles, ({ one }) => ({
-  exercise: one(exercises, {
-    fields: [exercisesOnMuscles.exerciseId],
-    references: [exercises.id]
-  }),
-
-  muscle: one(muscles, {
-    fields: [exercisesOnMuscles.muscleId],
-    references: [muscles.id]
-  })
-}))

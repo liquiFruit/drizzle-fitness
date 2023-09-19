@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { CheckIcon } from "lucide-react"
 
-import { InsertMuscleSchema } from "@/lib/db/schema/muscles"
+import { InsertMuscleSchema } from "@/lib/db/schema/muscles/muscles.table"
 import { trpc } from "@/lib/trpc/client/client"
 
 import {
