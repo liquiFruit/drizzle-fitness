@@ -1,9 +1,9 @@
 import { db } from "@/lib/db"
 
 export async function getExercises() {
-  const exercises = await db.query.exercises.findMany({
+  return (await db.query.exercises.findMany({
     with: {
-      exerciseMuscles: {
+      muscles: {
         columns: {
           exerciseId: false,
           muscleId: false
@@ -13,10 +13,8 @@ export async function getExercises() {
         }
       }
     }
-  })
-
-  return exercises.map(v => ({
-    ...v, muscleGroups: v.exerciseMuscles.map(({ muscle: { id, name } }) => ({
+  })).map(v => ({
+    ...v, muscleGroups: v.muscles.map(({ muscle: { id, name } }) => ({
       id, name
     }))
   }))
