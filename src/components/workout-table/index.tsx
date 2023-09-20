@@ -1,4 +1,5 @@
 "use client"
+
 import { columns } from "./columns"
 import { DataTable } from "@/components/ui/data-table"
 import { Button } from "../ui/button"
@@ -12,10 +13,10 @@ export function WorkoutTable() {
 		isLoading,
 		isError,
 		error,
-	} = trpc.workouts.getWorkouts.useQuery()
+	} = trpc.workouts.getWorkoutsByUser.useQuery()
 
 	return (
-		<div className="container mx-auto py-10">
+		<div>
 			<h1>All Workouts</h1>
 			{isLoading ? (
 				"Loading..."
