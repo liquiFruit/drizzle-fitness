@@ -27,11 +27,13 @@ import { Pagination } from "./pagination"
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[]
 	data: TData[]
+	showUI?: boolean
 }
 
 export function DataTable<TData, TValue>({
 	columns,
 	data,
+	showUI = true,
 }: DataTableProps<TData, TValue>) {
 	const [sorting, setSorting] = useState<SortingState>([])
 
@@ -44,12 +46,18 @@ export function DataTable<TData, TValue>({
 		getSortedRowModel: getSortedRowModel(),
 		state: {
 			sorting,
+			...(!showUI && {
+				pagination: {
+					pageIndex: 0,
+					pageSize: data.length,
+				},
+			}),
 		},
 	})
 
 	return (
 		<>
-			<ColumnVisibility table={table} />
+			{showUI ? <ColumnVisibility table={table} /> : null}
 
 			<div className="rounded-md border border-border my-2">
 				<Table>
@@ -105,7 +113,7 @@ export function DataTable<TData, TValue>({
 				</Table>
 			</div>
 
-			<Pagination table={table} />
+			{showUI ? <Pagination table={table} /> : null}
 		</>
 	)
 }

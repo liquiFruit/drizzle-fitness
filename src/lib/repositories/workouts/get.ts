@@ -1,14 +1,12 @@
-import { eq } from "drizzle-orm"
+import { eq, and } from "drizzle-orm"
 
 import { db } from "@/lib/db"
-import { SelectUser } from "@/lib/db/schema/auth"
-import { workouts } from "@/lib/db/schema/workouts/schema"
 
-export async function getWorkoutsByUserId(
-  userId: typeof SelectUser._type["id"]
+export async function getAllWorkoutsByClause(
+  clause: ReturnType<typeof eq | typeof and>
 ) {
   return (await db.query.workouts.findMany({
-    where: eq(workouts.userId, userId),
+    where: clause,
     with: {
       workoutExercises: {
         columns: {},
@@ -76,7 +74,8 @@ export async function getWorkoutsByUserId(
     return {
       ...workout,
       exercises,
-      muscles
+      muscles,
+      totalCalories
     }
   })
 }
