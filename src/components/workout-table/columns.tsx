@@ -1,9 +1,11 @@
 "use client"
 
+import Link from "next/link"
 import { ColumnDef } from "@tanstack/react-table"
 import { MoreHorizontal } from "lucide-react"
 
 import { fuzyTime } from "@/lib/utils"
+import { getAllWorkoutsByClause } from "@/lib/repositories/workouts/get"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -14,12 +16,11 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { ColumnHeader } from "@/components/ui/data-table/column-header"
-import { getWorkoutsByUserId } from "@/lib/repositories/workouts/get"
-import { Badge } from "../ui/badge"
-import Link from "next/link"
+import { MuscleBadge } from "@/components/muscle-badge"
+import { CalorieBadge } from "@/components/calorie-badge"
 
 export const columns: ColumnDef<
-	Awaited<ReturnType<typeof getWorkoutsByUserId>>[0]
+	Awaited<ReturnType<typeof getAllWorkoutsByClause>>[0]
 >[] = [
 	{
 		accessorKey: "date",
@@ -36,17 +37,13 @@ export const columns: ColumnDef<
 			const muscles = row.original.muscles
 			return (
 				<div className="flex flex-wrap gap-2">
-					{muscles.map(({ name, percentage }) => (
-						<Badge key={percentage} variant={"secondary"}>
-							<div
-								style={{
-									opacity: percentage,
-								}}
-								className="bg-green w-2 h-2 rounded-full mr-2"
-							/>
-							{name}/{percentage}
-						</Badge>
-					))}
+					<CalorieBadge calories={row.original.totalCalories} />
+
+					{muscles
+						.sort((a, b) => b.percentage - a.percentage)
+						.map((muscle) => (
+							<MuscleBadge muscle={muscle} />
+						))}
 				</div>
 			)
 		},

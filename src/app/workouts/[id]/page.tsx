@@ -3,13 +3,15 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { Clock3Icon, FlameIcon } from "lucide-react"
 
-import { RadialProgress } from "@/components/radial-progress"
-import { Badge } from "@/components/ui/badge"
-import { DataTable } from "@/components/ui/data-table"
-
 import { trpc } from "@/lib/trpc/client/client"
 import { getAllWorkoutsByClause } from "@/lib/repositories/workouts/get"
 import { humanNumber } from "@/lib/utils"
+
+import { RadialProgress } from "@/components/radial-progress"
+import { Badge } from "@/components/ui/badge"
+import { DataTable } from "@/components/ui/data-table"
+import { MuscleBadge } from "@/components/muscle-badge"
+import { CalorieBadge } from "@/components/calorie-badge"
 
 export default function WorkoutDetailView({
 	params: { id },
@@ -28,10 +30,7 @@ export default function WorkoutDetailView({
 			<h1>{workout.date.toDateString()}</h1>
 
 			<div className="flex flex-row flex-wrap gap-2 items-center">
-				<Badge variant={"secondary"} className="items-center">
-					<p>{humanNumber(workout.totalCalories)}</p>
-					<FlameIcon size={10} className="ml-1 stroke-orange" />
-				</Badge>
+				<CalorieBadge calories={workout.totalCalories} />
 
 				<Badge variant={"secondary"} className="items-center">
 					<p>25 min</p>
@@ -55,24 +54,15 @@ export default function WorkoutDetailView({
 						<p className="">{exercise.name}</p>
 
 						<div className="flex flex-row flex-wrap gap-2 my-1">
-							<Badge
-								variant={"secondary"}
-								className="items-center"
-							>
-								<p>
-									{humanNumber(
-										exercise.cpu *
-											sets.reduce((p, v) => ({
-												...p,
-												details: p.details + v.details,
-											})).details
-									)}
-								</p>
-								<FlameIcon
-									size={10}
-									className="ml-1 stroke-orange"
-								/>
-							</Badge>
+							<CalorieBadge
+								calories={
+									exercise.cpu *
+									sets.reduce((p, v) => ({
+										...p,
+										details: p.details + v.details,
+									})).details
+								}
+							/>
 
 							{exercise.muscles
 								.map((muscle) =>
@@ -109,15 +99,3 @@ const columns: ColumnDef<TWorkout>[] = [
 		},
 	},
 ]
-
-type TMuscle = Awaited<
-	ReturnType<typeof getAllWorkoutsByClause>
->[0]["muscles"][0]
-function MuscleBadge({ muscle }: { muscle: TMuscle }) {
-	return (
-		<Badge variant={"secondary"}>
-			<RadialProgress progress={muscle.percentage} className="w-3 mr-2" />
-			<p>{muscle.name}</p>
-		</Badge>
-	)
-}
