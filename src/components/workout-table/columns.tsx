@@ -42,7 +42,7 @@ export const columns: ColumnDef<
 					{muscles
 						.sort((a, b) => b.percentage - a.percentage)
 						.map((muscle) => (
-							<MuscleBadge muscle={muscle} />
+							<MuscleBadge key={muscle.name} muscle={muscle} />
 						))}
 				</div>
 			)

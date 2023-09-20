@@ -38,7 +38,7 @@ export default function WorkoutDetailView({
 				</Badge>
 
 				{workout.muscles.map((muscle) => (
-					<Badge variant={"secondary"}>
+					<Badge key={muscle.name} variant={"secondary"}>
 						<RadialProgress
 							progress={muscle.percentage}
 							className="w-3 mr-2"
@@ -50,7 +50,7 @@ export default function WorkoutDetailView({
 
 			<div className="mt-8 flex flex-col gap-4">
 				{workout.exercises.map(({ exercise, sets }) => (
-					<div>
+					<div key={exercise.id}>
 						<p className="">{exercise.name}</p>
 
 						<div className="flex flex-row flex-wrap gap-2 my-1">
@@ -71,7 +71,9 @@ export default function WorkoutDetailView({
 									)
 								)
 								.map((m) =>
-									!!m ? <MuscleBadge muscle={m} /> : null
+									!!m ? (
+										<MuscleBadge key={m.name} muscle={m} />
+									) : null
 								)}
 						</div>
 
