@@ -16,7 +16,7 @@ var presets = [
     }
   })
 ]
-if (process.env.PREFIX) presets.push(presetAutoprefixer())
+if (process.env.NODE_ENV === "production") presets.push(presetAutoprefixer())
 
 
 export default defineConfig({

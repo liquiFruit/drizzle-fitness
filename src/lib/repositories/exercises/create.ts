@@ -16,10 +16,10 @@ export async function createExercises({
       .insert(exercises)
       .values(newExercise)
 
-    const { changes } = await db
+    const { rows } = await db
       .insert(exercisesOnMuscles)
       .values(muscles.map(muscleID => ({
-        exerciseId: exerciseID as number,
+        exerciseId: exerciseID as any as number,
         muscleId: muscleID as number
       })))
 
