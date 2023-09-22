@@ -107,11 +107,11 @@ export function CreateExercise({ initialState }: { initialState: Partial<T> }) {
 								>
 									<div>
 										<p>No muscle groups found</p>
-										<Link href="/muscles/create">
-											<Button variant={"link"}>
+										<Button variant={"link"} asChild>
+											<Link href="/muscles/create">
 												Create a muscle group
-											</Button>
-										</Link>
+											</Link>
+										</Button>
 									</div>
 								</Combobox>
 							</FormControl>

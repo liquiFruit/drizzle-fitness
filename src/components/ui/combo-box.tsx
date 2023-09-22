@@ -68,22 +68,28 @@ export function Combobox<T extends React.Key>({
 						{children ?? "No options found."}
 					</CommandEmpty>
 					<CommandGroup>
-						{options.map((option) => (
-							<CommandItem
-								key={option.value}
-								onSelect={handleSelection}
-							>
-								<Check
-									className={cn(
-										"mr-2 h-4 w-4",
-										value === option.value
-											? "opacity-100"
-											: "opacity-0"
-									)}
-								/>
-								{option.label}
-							</CommandItem>
-						))}
+						{options.length > 0
+							? options.map((option) => (
+									<CommandItem
+										key={option.value}
+										onSelect={handleSelection}
+									>
+										<Check
+											className={cn(
+												"mr-2 h-4 w-4",
+												value === option.value
+													? "opacity-100"
+													: "opacity-0"
+											)}
+										/>
+										{option.label}
+									</CommandItem>
+							  ))
+							: (
+									<div className="grid place-content-center">
+										{children}
+									</div>
+							  ) ?? null}
 					</CommandGroup>
 				</Command>
 			</PopoverContent>
