@@ -1,4 +1,4 @@
-import { SqliteError } from "better-sqlite3"
+import { LibsqlError } from "@libsql/client/sqlite3"
 
 import { db } from "@/lib/db"
 import { exercisesOnMuscles } from "@/lib/db/schema/exercises/schema"
@@ -18,14 +18,14 @@ export async function createExercises({
 
     const { rows } = await db
       .insert(exercisesOnMuscles)
-      .values(muscles.map(muscleID => ({
+      .values(muscles!.map(muscleID => ({
         exerciseId: exerciseID as any as number,
         muscleId: muscleID as number
       })))
 
     return "Success"
   } catch (error) {
-    if (error instanceof SqliteError) {
+    if (error instanceof LibsqlError) {
       if (error.code === "SQLITE_CONSTRAINT_UNIQUE")
         return "NameExists"
     }

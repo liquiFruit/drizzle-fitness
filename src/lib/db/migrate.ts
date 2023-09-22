@@ -1,18 +1,20 @@
 import "dotenv/config"
 
-import { drizzle, type BetterSQLite3Database } from "drizzle-orm/better-sqlite3"
-import { migrate } from "drizzle-orm/better-sqlite3/migrator"
-import Database from 'better-sqlite3'
+import { drizzle } from "drizzle-orm/libsql"
+import { migrate } from "drizzle-orm/libsql/migrator"
+import { createClient } from "@libsql/client"
 
 
 const runMigrate = async () => {
-  if (!process.env.DATABASE_URL) {
-    throw new Error("DATABASE_URL is not defined")
+  if (!process.env.TURSO_URL || !process.env.TURSO_AUTH_TOKEN) {
+    throw new Error("Missing TURSO_URL and TURSO_AUTH_TOKEN in .env")
   }
 
-
-  const sqlite = new Database('sqlite.db')
-  const db: BetterSQLite3Database = drizzle(sqlite)
+  const sqlite = createClient({
+    url: process.env.TURSO_URL,
+    authToken: process.env.TURSO_AUTH_TOKEN,
+  })
+  const db = drizzle(sqlite)
 
 
   console.log("⏳ Running migrations...")
