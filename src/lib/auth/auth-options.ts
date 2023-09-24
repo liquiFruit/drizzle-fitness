@@ -12,6 +12,7 @@ declare module "next-auth" {
   }
 }
 export const authOptions: NextAuthOptions = {
+  debug: true,
   adapter: DrizzleAdapter(db),
   providers: [
     GithubProvider({
