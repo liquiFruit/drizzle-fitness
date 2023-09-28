@@ -9,7 +9,7 @@ export async function createMuscleGroup(newMuscle: typeof InsertMuscleSchema._ty
     return "Success"
   } catch (error) {
     if (error instanceof LibsqlError)
-      if (error.code === "SQLITE_CONSTRAINT_UNIQUE")
+      if (error.code === "SQLITE_CONSTRAINT")
         return "NameExists"
 
     console.log("error:", error)
